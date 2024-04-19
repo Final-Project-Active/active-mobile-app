@@ -9,11 +9,11 @@ import Image5 from "../assets/Image5.png";
 import Image6 from "../assets/Image6.png";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function WelcomeScreen() {
+export default function WelcomeScreen({navigation}) {
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
-                    <View style={styles.logoContainer}>
+                    <View>
                         <Image source={Logo} style={styles.logo} />
                     </View>
                     <View style={styles.ellipseContainer}>
@@ -48,7 +48,7 @@ export default function WelcomeScreen() {
                     </View>
                     <Text style={styles.boldText}>Let's Move</Text>
                     <Text style={styles.text}>Fitness and wellness app for you {"\n"} anytime, anywhere.</Text>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("AuthOptions")}>
                         <Text style={styles.buttonText}>Get Started</Text>
                         <Ionicons name="chevron-forward-outline" size={24} color="white" />
                     </TouchableOpacity>
@@ -62,9 +62,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "flex-start"
-    },
-    logoContainer: {
-        marginBotton: 20
     },
     logo: {
         width: 200,
