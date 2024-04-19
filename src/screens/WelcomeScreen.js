@@ -77,9 +77,9 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     ellipse: {
-        width: 150,
-        height: 150,
-        borderRadius: 75,
+        width: 180,
+        height: 180,
+        borderRadius: 100,
         overflow: "hidden"
     },
     ellipseImage: {
@@ -104,10 +104,10 @@ const styles = StyleSheet.create({
         transform: [{rotate: "90deg"}],
     },
     halfEllipseContainerTop: {
-        top: 200,
+        top: 300,
     },
     halfEllipseContainerBottom: {
-        top: 360
+        top: 460
     },
     halfEllipse: {
         width: "100%",
@@ -122,7 +122,6 @@ const styles = StyleSheet.create({
         resizeMode: "cover",
     },
     boldText: {
-        marginTop: 10,
         fontSize: 24,
         fontWeight: "bold",
         textAlign: "center"
@@ -137,7 +136,7 @@ const styles = StyleSheet.create({
         width: 185,
         height: 50,
         left: 100,
-        top: 640,
+        top: 720,
         backgroundColor: "black",
         borderRadius: 48,
         flexDirection: "row",
