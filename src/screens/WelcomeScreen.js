@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Logo from "../assets/Logo.png";
 import Image1 from "../assets/Image1.png";
@@ -7,6 +7,7 @@ import Image3 from "../assets/Image3.png";
 import Image4 from "../assets/Image4.png";
 import Image5 from "../assets/Image5.png";
 import Image6 from "../assets/Image6.png";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function WelcomeScreen() {
     return (
@@ -45,6 +46,12 @@ export default function WelcomeScreen() {
                             <Image source={Image2} style={styles.ellipseImage} />
                         </View>
                     </View>
+                    <Text style={styles.boldText}>Let's Move</Text>
+                    <Text style={styles.text}>Fitness and wellness app for you {"\n"} anytime, anywhere.</Text>
+                    <TouchableOpacity style={styles.button}>
+                        <Text style={styles.buttonText}>Get Started</Text>
+                        <Ionicons name="chevron-forward-outline" size={24} color="white" />
+                    </TouchableOpacity>
             </SafeAreaView>
         </SafeAreaProvider>
     )
@@ -65,13 +72,14 @@ const styles = StyleSheet.create({
         resizeMode: "contain"
     },
     ellipseContainer: {
-        marginTop: 20,
+        marginTop: -50,
+        marginBottom: 60,
         alignItems: "center"
     },
     ellipse: {
-        width: 150,
-        height: 150,
-        borderRadius: 75,
+        width: 180,
+        height: 180,
+        borderRadius: 100,
         overflow: "hidden"
     },
     ellipseImage: {
@@ -81,15 +89,25 @@ const styles = StyleSheet.create({
     },
     halfEllipseContainer: {
         position: "absolute",
-        right: -37.5,
-        top: 300,
+        top: 200,
         width: 150,
         height: 100,
+        overflow: "hidden",
+    },
+    halfEllipseContainerLeft: {
+        left: -37.5,
+        transform: [{rotate: "-90deg"}],
+    },
+    halfEllipseContainerRight: {
+        left: "auto",
+        right: -37.5,
         transform: [{rotate: "90deg"}],
-        overflow: "hidden"
+    },
+    halfEllipseContainerTop: {
+        top: 300,
     },
     halfEllipseContainerBottom: {
-        top: 500
+        top: 460
     },
     halfEllipse: {
         width: "100%",
@@ -102,6 +120,38 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
         resizeMode: "cover",
+    },
+    boldText: {
+        fontSize: 24,
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    text: {
+        marginTop: 5,
+        fontSize: 16,
+        textAlign: "center"
+    },
+    button: {
+        position: "absolute",
+        width: 185,
+        height: 50,
+        left: 100,
+        top: 720,
+        backgroundColor: "black",
+        borderRadius: 48,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "13px 20px 13px 28px",
+        gap: 10
+    },
+    buttonText: {
+        fontStyle: "normal",
+        fontWeight: "600",
+        fontSize: 17,
+        lineHeight: 20,
+        textAlign: "center",
+        color: "white"
     }
 })
 
