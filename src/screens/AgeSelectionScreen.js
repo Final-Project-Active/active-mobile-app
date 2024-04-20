@@ -54,7 +54,6 @@ export default function AgeSelectionScreen() {
             {data.map((item) => {
               const { opacity, fontSize } = interpolateColorAndSize(item)
               const adjustedOpacity = Math.max(opacity - 0.3, 0)
-              const textColor = item === selectedNumber ? "#59A5D8" : "white"
               return (
                 <TouchableOpacity
                   key={item}
@@ -62,13 +61,13 @@ export default function AgeSelectionScreen() {
                   style={[styles.numberButton, {
                     opacity: adjustedOpacity,
                     fontSize: fontSize,
-                    borderTopColor: item === selectedNumber ? "white" : "transparent",
-                    borderTopWidth: item === selectedNumber ? 1 : 0,
-                    borderBottomColor: item === selectedNumber ? "white" : "transparent",
-                    borderBottomWidth: item === selectedNumber ? 1 : 0,
+                    borderTopColor: item === selectedNumber ? "#59A5D8" : "transparent",
+                    borderTopWidth: item === selectedNumber ? 2 : 0,
+                    borderBottomColor: item === selectedNumber ? "#59A5D8" : "transparent",
+                    borderBottomWidth: item === selectedNumber ? 2 : 0,
                   }]}
                 >
-                  <Text style={[styles.numberText, { color: textColor, fontSize: item === selectedNumber ? 24 : 20 }]}>{item}</Text>
+                  <Text style={[styles.numberText, { fontSize: item === selectedNumber ? 24 : 20 }]}>{item}</Text>
                 </TouchableOpacity>
               )
             })}
