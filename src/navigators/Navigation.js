@@ -6,6 +6,7 @@ import GenderSelectionScreen from "../screens/GenderSelectionScreen";
 import AgeSelectionScreen from "../screens/AgeSelectionScreen";
 import HeightSelectionScreen from "../screens/HeightSelectionScreen";
 import GoalSelectionScreen from "../screens/GoalSelectionScreen";
+import LevelSelectionScreen from "../screens/LevelSelectionScreen";
 
 const Stack = createNativeStackNavigator()
 
@@ -17,8 +18,9 @@ export default function navigation() {
                 <Stack.Screen name="AuthOptions" component={AuthOptionsScreen} options={{ headerShown: false }}/>
                 <Stack.Screen name="GenderSelectionScreen" component={GenderSelectionScreen} options={{ headerShown: false }}/>
                 <Stack.Screen name="AgeSelectionScreen" component={AgeSelectionScreen} options={{ headerShown: false }}/>
-                <Stack.Screen name="HeightSelection" component={HeightSelectionScreen} options={{ headerShown: false }}/> */}
-                <Stack.Screen name="GoalSelectionScreen" component={GoalSelectionScreen} options={{ headerShown: false }}/>
+                <Stack.Screen name="HeightSelection" component={HeightSelectionScreen} options={{ headerShown: false }}/>
+                <Stack.Screen name="GoalSelectionScreen" component={GoalSelectionScreen} options={{ headerShown: false }}/> */}
+                <Stack.Screen name="LevelSelectionScreen" component={LevelSelectionScreen} options={{ headerShown: false }}/>
             </Stack.Navigator>
         </NavigationContainer>
     )
