@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-export default function GenderSelectionScreen() {
+export default function GenderSelectionScreen({navigation}) {
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
@@ -35,7 +35,7 @@ export default function GenderSelectionScreen() {
                         <Ionicons name="chevron-back-outline" size={24} color="white" />
                         <Text style={[styles.buttonText, styles.backButtonText]}>Back</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, styles.nextButton]} onPress={() => console.log("Button Pressed")}>
+                    <TouchableOpacity style={[styles.button, styles.nextButton]} onPress={() => navigation.navigate("AgeSelectionScreen")}>
                         <Text style={[styles.buttonText, styles.nextButtonText]}>Next</Text>
                         <Ionicons name="chevron-forward-outline" size={24} color="black" />
                     </TouchableOpacity>

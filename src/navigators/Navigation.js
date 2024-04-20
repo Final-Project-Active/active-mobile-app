@@ -16,12 +16,12 @@ export default function navigation() {
         <NavigationContainer>
             <Stack.Navigator>
                 {/* <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }}/> 
-                <Stack.Screen name="AuthOptions" component={AuthOptionsScreen} options={{ headerShown: false }}/>
+                <Stack.Screen name="AuthOptions" component={AuthOptionsScreen} options={{ headerShown: false }}/> */}
                 <Stack.Screen name="GenderSelectionScreen" component={GenderSelectionScreen} options={{ headerShown: false }}/>
                 <Stack.Screen name="AgeSelectionScreen" component={AgeSelectionScreen} options={{ headerShown: false }}/>
-                <Stack.Screen name="HeightSelection" component={HeightSelectionScreen} options={{ headerShown: false }}/>
+                <Stack.Screen name="HeightSelectionScreen" component={HeightSelectionScreen} options={{ headerShown: false }}/>
                 <Stack.Screen name="GoalSelectionScreen" component={GoalSelectionScreen} options={{ headerShown: false }}/>
-                <Stack.Screen name="LevelSelectionScreen" component={LevelSelectionScreen} options={{ headerShown: false }}/> */}
+                <Stack.Screen name="LevelSelectionScreen" component={LevelSelectionScreen} options={{ headerShown: false }}/>
                 <Stack.Screen name="WeightSelectionScreen" component={WeightSelectionScreen} options={{ headerShown: false }}/>
             </Stack.Navigator>
         </NavigationContainer>
