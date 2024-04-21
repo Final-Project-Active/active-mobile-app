@@ -49,7 +49,6 @@ export default function GenderSelectionScreen({ navigation, route }) {
                         onPress={() => handleGenderSelection('female')}
                     >
                         <View style={[styles.ellipse, { backgroundColor: femaleBackgroundColor }]}>
-                            {/* <Image source={Image1} style={styles.ellipseImage} /> */}
                             <Ionicons name="female" size={80} color={femaleTextColor} style={styles.icon} />
                             <Text style={[styles.genderText, { color: femaleTextColor }]}>Female</Text>
                         </View>
@@ -57,17 +56,18 @@ export default function GenderSelectionScreen({ navigation, route }) {
                 </View>
                 <View style={styles.buttonsContainer}>
                     <TouchableOpacity style={[styles.button, styles.backButton]}
-                        onPress={() => navigation.navigate("SignUpScreen", { ...route.params, gender })}>
+                        onPress={() => navigation.navigate("SignUpScreen")}>
                         <Ionicons name="chevron-back-outline" size={24} color="white" />
                         <Text style={[styles.buttonText, styles.backButtonText]}>Back</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, styles.nextButton]} onPress={() => navigation.navigate("AgeSelectionScreen")}>
+                    <TouchableOpacity style={[styles.button, styles.nextButton]}
+                        onPress={() => navigation.navigate("AgeSelectionScreen", { ...route.params, gender })}>
                         <Text style={[styles.buttonText, styles.nextButtonText]}>Next</Text>
                         <Ionicons name="chevron-forward-outline" size={24} color="black" />
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
-        </SafeAreaProvider>
+        </SafeAreaProvider >
     )
 }
 
