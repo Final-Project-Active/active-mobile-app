@@ -64,11 +64,11 @@ export default function AuthOptionsScreen({ navigation }) {
                     <Pagination data={data} currentIndex={currentIndex} />
                 </View>
                 <View style={styles.buttonsContainer}>
-                    <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={() => { navigation.navigate("SignIn") }}>
+                    <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={() => { navigation.navigate("SignInScreen") }}>
                         <Text style={[styles.buttonText, styles.loginButtonText]}>Login</Text>
                         <Ionicons name="chevron-forward-outline" size={24} color="black" />
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, styles.registerButton]} onPress={() => { navigation.navigate("SignUp") }}>
+                    <TouchableOpacity style={[styles.button, styles.registerButton]} onPress={() => { navigation.navigate("SignUpScreen") }}>
                         <Text style={[styles.buttonText, styles.registerButtonText]}>Sign Up</Text>
                         <Ionicons name="chevron-forward-outline" size={24} color="white" />
                     </TouchableOpacity>

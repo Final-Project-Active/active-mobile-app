@@ -31,7 +31,7 @@ export default function GenderSelectionScreen({navigation}) {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.buttonsContainer}>
-               <TouchableOpacity style={[styles.button, styles.backButton]} onPress={() => console.log("Button Pressed")}>
+               <TouchableOpacity style={[styles.button, styles.backButton]} onPress={() => navigation.navigate("SignUpScreen")}>
                         <Ionicons name="chevron-back-outline" size={24} color="white" />
                         <Text style={[styles.buttonText, styles.backButtonText]}>Back</Text>
                     </TouchableOpacity>
