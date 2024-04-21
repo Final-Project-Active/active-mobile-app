@@ -4,7 +4,7 @@ import Image9 from "../assets/Image9.png";
 import { MaterialIcons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get("window");
-export default function SignInScreen() {
+export default function SignInScreen({ navigation }) {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
@@ -18,7 +18,7 @@ export default function SignInScreen() {
               }}>
                 <Text style={styles.navButtonText}>Login</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.navButton}>
+              <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('SignUp')}>
                 <Text style={styles.navButtonText}>Sign Up</Text>
               </TouchableOpacity>
             </View>
