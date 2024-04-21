@@ -1,7 +1,7 @@
 import { Dimensions, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Image9 from "../assets/Image9.png";
-import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { serverRequest } from '../utils/axios'
 import { useContext, useState } from "react";
 import AuthContext from '../contexts/authContext';
@@ -11,6 +11,7 @@ const { width } = Dimensions.get("window");
 export default function SignInScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false)
   const { setIsLoggedIn } = useContext(AuthContext);
 
   const handleLogin = async () => {
@@ -29,12 +30,15 @@ export default function SignInScreen({ navigation }) {
       setPassword('');
       setIsLoggedIn(true);
 
-      navigation.navigate('Home');
+      navigation.navigate('HomeScreen');
     } catch (error) {
       console.log(error)
     }
   }
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
 
   return (
     <SafeAreaProvider>
@@ -57,8 +61,8 @@ export default function SignInScreen({ navigation }) {
               <Text style={styles.heading}>Welcome Back</Text>
               <Text style={[styles.heading, styles.bold]}> User,</Text>
             </Text>
-            <Text style={styles.text}>ENTER YOUR INFORMATIONS BELLOW OR</Text>
-            <Text style={styles.text}>LOGIN WITH A OTHER ACCOUNT</Text>
+            <Text style={styles.text}>ENTER YOUR INFORMATION BELOW OR</Text>
+            <Text style={styles.text}>SIGN UP WITH ANOTHER ACCOUNT.</Text>
           </ImageBackground>
         </View>
         <View style={styles.form}>
@@ -69,14 +73,19 @@ export default function SignInScreen({ navigation }) {
             value={email}
             onChangeText={(text) => setEmail(text)}
           />
-          <TextInput
-            secureTextEntry={true}
-            placeholder="Password"
-            placeholderTextColor="white"
-            style={styles.input}
-            value={password}
-            onChangeText={(text) => setPassword(text)}
-          />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              secureTextEntry={!showPassword}
+              placeholder="Password"
+              placeholderTextColor="white"
+              style={styles.input}
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+            />
+            <TouchableOpacity onPress={togglePasswordVisibility} style={styles.passwordToggle}>
+              <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={24} color="white" />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={handleLogin}>
@@ -168,6 +177,14 @@ const styles = StyleSheet.create({
     borderBottomColor: "white",
     borderBottomWidth: 1,
     opacity: 0.8
+  },
+  passwordContainer: {
+    position: "relative"
+  },
+  passwordToggle: {
+    position: "absolute",
+    right: 10,
+    top: 40
   },
   buttonContainer: {
     flexDirection: "row",
