@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 
-export default function GoalSelectionScreen({navigation}) {
+export default function GoalSelectionScreen({ navigation, route }) {
   const [selectedGoal, setSelectedGoal] = useState("Lose Weight")
   const [scrollPosition, setScrollPosition] = useState(0)
 
@@ -43,7 +43,7 @@ export default function GoalSelectionScreen({navigation}) {
             scrollEventThrottle={16}
           >
             {data.map((item) => {
-              const opacity = selectedGoal === item ? 1 : 0.5  
+              const opacity = selectedGoal === item ? 1 : 0.5
               const adjustedOpacity = Math.max(opacity - 0.3, 0)
               return (
                 <TouchableOpacity
@@ -68,7 +68,8 @@ export default function GoalSelectionScreen({navigation}) {
             <Ionicons name="chevron-back-outline" size={24} color="white" />
             <Text style={[styles.buttonText, styles.backButtonText]}>Back</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, styles.nextButton]} onPress={() => navigation.navigate("LevelSelectionScreen")}>
+          <TouchableOpacity style={[styles.button, styles.nextButton]}
+            onPress={() => navigation.navigate("LevelSelectionScreen", { ...route.params, goal: selectedGoal })}>
             <Text style={[styles.buttonText, styles.nextButtonText]}>Next</Text>
             <Ionicons name="chevron-forward-outline" size={24} color="black" />
           </TouchableOpacity>
