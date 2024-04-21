@@ -48,7 +48,7 @@ export default function WelcomeScreen({ navigation }) {
                 </View>
                 <Text style={styles.boldText}>Let's Move</Text>
                 <Text style={styles.text}>Fitness and wellness app for you {"\n"} anytime, anywhere.</Text>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("AuthOptions")}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("AuthOptionsScreen")}>
                     <Text style={styles.buttonText}>Get Started</Text>
                     <Ionicons name="chevron-forward-outline" size={24} color="white" />
                 </TouchableOpacity>

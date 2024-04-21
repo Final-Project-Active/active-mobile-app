@@ -17,10 +17,10 @@ export default function navigation() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="AuthOptions" component={AuthOptionsScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="AuthOptionsScreen" component={AuthOptionsScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="SignInScreen" component={SignInScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="GenderSelectionScreen" component={GenderSelectionScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="AgeSelectionScreen" component={AgeSelectionScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="HeightSelectionScreen" component={HeightSelectionScreen} options={{ headerShown: false }} />

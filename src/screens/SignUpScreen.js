@@ -11,7 +11,7 @@ export default function SignUpScreen({ navigation }) {
         <View style={styles.header}>
           <ImageBackground source={Image9} style={styles.image}>
             <View style={styles.overlay}>
-              <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('SignIn')}>
+              <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('SignInScreen')}>
                 <Text style={styles.navButtonText}>Login</Text>
               </TouchableOpacity>
               <TouchableOpacity style={{
@@ -54,7 +54,7 @@ export default function SignUpScreen({ navigation }) {
           />
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, styles.nextButton]} onPress={() => navigation.navigate("WeightSelectionScreen")}>
+          <TouchableOpacity style={[styles.button, styles.nextButton]} onPress={() => navigation.navigate("GenderSelectionScreen")}>
             <Text style={[styles.buttonText, styles.nextButtonText]}>Next</Text>
             <Ionicons name="chevron-forward-outline" size={24} color="black" />
           </TouchableOpacity>
