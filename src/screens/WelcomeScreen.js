@@ -9,49 +9,49 @@ import Image5 from "../assets/Image5.png";
 import Image6 from "../assets/Image6.png";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function WelcomeScreen() {
+export default function WelcomeScreen({ navigation }) {
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
-                    <View style={styles.logoContainer}>
-                        <Image source={Logo} style={styles.logo} />
+                <View>
+                    <Image source={Logo} style={styles.logo} />
+                </View>
+                <View style={styles.ellipseContainer}>
+                    <View style={styles.ellipse}>
+                        <Image source={Image1} style={styles.ellipseImage} />
                     </View>
-                    <View style={styles.ellipseContainer}>
-                        <View style={styles.ellipse}>
-                            <Image source={Image1} style={styles.ellipseImage} />
-                        </View>
-                    </View>
-                    <View style={[styles.halfEllipseContainer, styles.halfEllipseContainerLeft, styles.halfEllipseContainerTop]}>
-                        <View style={styles.halfEllipse}>
+                </View>
+                <View style={[styles.halfEllipseContainer, styles.halfEllipseContainerLeft, styles.halfEllipseContainerTop]}>
+                    <View style={styles.halfEllipse}>
                         <Image source={Image5} style={styles.halfEllipseImage} />
                     </View>
-                    </View>
-                    <View style={[styles.halfEllipseContainer, styles.halfEllipseContainerLeft, styles.halfEllipseContainerBottom]}>
-                        <View style={styles.halfEllipse}>
+                </View>
+                <View style={[styles.halfEllipseContainer, styles.halfEllipseContainerLeft, styles.halfEllipseContainerBottom]}>
+                    <View style={styles.halfEllipse}>
                         <Image source={Image6} style={styles.halfEllipseImage} />
                     </View>
-                    </View>
-                    <View style={[styles.halfEllipseContainer, styles.halfEllipseContainerRight, styles.halfEllipseContainerTop]}>
-                        <View style={styles.halfEllipse}>
+                </View>
+                <View style={[styles.halfEllipseContainer, styles.halfEllipseContainerRight, styles.halfEllipseContainerTop]}>
+                    <View style={styles.halfEllipse}>
                         <Image source={Image3} style={styles.halfEllipseImage} />
                     </View>
-                    </View>
-                    <View style={[styles.halfEllipseContainer, styles.halfEllipseContainerRight, styles.halfEllipseContainerBottom]}>
-                        <View style={styles.halfEllipse}>
+                </View>
+                <View style={[styles.halfEllipseContainer, styles.halfEllipseContainerRight, styles.halfEllipseContainerBottom]}>
+                    <View style={styles.halfEllipse}>
                         <Image source={Image4} style={styles.halfEllipseImage} />
                     </View>
+                </View>
+                <View style={styles.ellipseContainer}>
+                    <View style={styles.ellipse}>
+                        <Image source={Image2} style={styles.ellipseImage} />
                     </View>
-                    <View style={styles.ellipseContainer}>
-                        <View style={styles.ellipse}>
-                            <Image source={Image2} style={styles.ellipseImage} />
-                        </View>
-                    </View>
-                    <Text style={styles.boldText}>Let's Move</Text>
-                    <Text style={styles.text}>Fitness and wellness app for you {"\n"} anytime, anywhere.</Text>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Get Started</Text>
-                        <Ionicons name="chevron-forward-outline" size={24} color="white" />
-                    </TouchableOpacity>
+                </View>
+                <Text style={styles.boldText}>Let's Move</Text>
+                <Text style={styles.text}>Fitness and wellness app for you {"\n"} anytime, anywhere.</Text>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("AuthOptions")}>
+                    <Text style={styles.buttonText}>Get Started</Text>
+                    <Ionicons name="chevron-forward-outline" size={24} color="white" />
+                </TouchableOpacity>
             </SafeAreaView>
         </SafeAreaProvider>
     )
@@ -62,9 +62,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "flex-start"
-    },
-    logoContainer: {
-        marginBotton: 20
     },
     logo: {
         width: 200,
@@ -96,12 +93,12 @@ const styles = StyleSheet.create({
     },
     halfEllipseContainerLeft: {
         left: -37.5,
-        transform: [{rotate: "-90deg"}],
+        transform: [{ rotate: "-90deg" }],
     },
     halfEllipseContainerRight: {
         left: "auto",
         right: -37.5,
-        transform: [{rotate: "90deg"}],
+        transform: [{ rotate: "90deg" }],
     },
     halfEllipseContainerTop: {
         top: 300,
@@ -154,4 +151,3 @@ const styles = StyleSheet.create({
         color: "white"
     }
 })
-

@@ -30,13 +30,13 @@ export default function AuthOptionsScreen() {
     const renderItem = ({ item, index }) => (
         <View style={styles.slide}>
             <ImageBackground source={item.image} style={styles.background}>
-                <LinearGradient 
-                colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.79)']}
-                style={styles.gradient}
+                <LinearGradient
+                    colors={['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.79)']}
+                    style={styles.gradient}
                 />
                 <Text style={styles.heading}>{item.heading}</Text>
                 <Text style={styles.text}>{item.text}</Text>
-                </ImageBackground>  
+            </ImageBackground>
         </View>
     )
 
@@ -45,26 +45,26 @@ export default function AuthOptionsScreen() {
         const index = Math.floor(contentOffset / width)
         setCurrentIndex(index)
     }
-    
+
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
-               <FlatList 
-               data={data}
-               horizontal
-               pagingEnabled
-               showHorizontalScrollIndicator={false}
-               renderItem={renderItem}
-               keyExtractor={(item) => item.key}
-               style={styles.flatList}
-               onScroll={handlePaginationChange}
-               scrollEventThrottle={16}
-               />
-               <View style={styles.paginationContainer}>
+                <FlatList
+                    data={data}
+                    horizontal
+                    pagingEnabled
+                    showHorizontalScrollIndicator={false}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.key}
+                    style={styles.flatList}
+                    onScroll={handlePaginationChange}
+                    scrollEventThrottle={16}
+                />
+                <View style={styles.paginationContainer}>
                     <Pagination data={data} currentIndex={currentIndex} />
-               </View>
-               <View style={styles.buttonsContainer}>
-               <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={() => console.log("Button Pressed")}>
+                </View>
+                <View style={styles.buttonsContainer}>
+                    <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={() => console.log("Button Pressed")}>
                         <Text style={[styles.buttonText, styles.loginButtonText]}>Login</Text>
                         <Ionicons name="chevron-forward-outline" size={24} color="black" />
                     </TouchableOpacity>
@@ -72,7 +72,7 @@ export default function AuthOptionsScreen() {
                         <Text style={[styles.buttonText, styles.registerButtonText]}>Sign Up</Text>
                         <Ionicons name="chevron-forward-outline" size={24} color="white" />
                     </TouchableOpacity>
-               </View>
+                </View>
             </SafeAreaView>
         </SafeAreaProvider>
     )
