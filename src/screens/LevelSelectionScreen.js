@@ -19,15 +19,13 @@ export default function LevelSelectionScreen({ navigation, route }) {
     setSelectedLevel(level)
   }
 
-  console.log({ ...route.params, physicalActivity: selectedLevel })
   const handleSignUp = async () => {
     try {
-      const response = await serverRequest({
+      await serverRequest({
         method: "post",
         url: "/register",
         data: { ...route.params, physicalActivity: selectedLevel },
       });
-      console.log(response)
       navigation.navigate('SignInScreen');
     } catch (error) {
       console.log(error)

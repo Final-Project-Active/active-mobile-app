@@ -56,6 +56,7 @@ export default function HomeScreen({ navigation }) {
 
   const handleTabPress = (tabName) => {
     setActiveTab(tabName)
+    navigation.navigate(tabName)
   }
 
   return (
@@ -86,25 +87,25 @@ export default function HomeScreen({ navigation }) {
         />
       </SafeAreaView>
       <View style={styles.bottomTabContainer}>
-        <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("Home")}>
-        <Feather name="home" size={24} color={activeTab === "Home" ? "#59A5D8" : "#9DB2CE"} />
-        {activeTab === "Home" && <Text style={styles.tabText}>Home</Text>}
+        <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("HomeScreen")}>
+          <Feather name="home" size={24} color={activeTab === "HomeScreen" ? "#59A5D8" : "#9DB2CE"} />
+          {activeTab === "Home" && <Text style={styles.tabText}>Home</Text>}
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("Analytics")}>
-        <Entypo name="bar-graph" size={24} color={activeTab === "Analytics" ? "#59A5D8" : "#9DB2CE"} />
-        {activeTab === "Analytics" && <Text style={styles.tabText}>Analytics</Text>}
+          <Entypo name="bar-graph" size={24} color={activeTab === "Analytics" ? "#59A5D8" : "#9DB2CE"} />
+          {activeTab === "Analytics" && <Text style={styles.tabText}>Analytics</Text>}
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("Community")}>
-        <Ionicons name="people-circle-outline" size={30} color={activeTab === "Community" ? "#59A5D8" : "#9DB2CE"} />
-        {activeTab === "Community" && <Text style={styles.tabText}>Community</Text>}
+          <Ionicons name="people-circle-outline" size={30} color={activeTab === "Community" ? "#59A5D8" : "#9DB2CE"} />
+          {activeTab === "Community" && <Text style={styles.tabText}>Community</Text>}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("Notification")}>
-        <Ionicons name="notifications" size={29} color={activeTab === "Notification" ? "#59A5D8" : "#9DB2CE"} />
-        {activeTab === "Notification" && <Text style={styles.tabText}>Notification</Text>}
+        <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("NotificationScreen")}>
+          <Ionicons name="notifications" size={29} color={activeTab === "NotificationScreen" ? "#59A5D8" : "#9DB2CE"} />
+          {activeTab === "Notification" && <Text style={styles.tabText}>Notification</Text>}
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("Profile")}>
-        <Ionicons name="person" size={24} color={activeTab === "Profile" ? "#59A5D8" : "#9DB2CE"} />
-        {activeTab === "Profile" && <Text style={styles.tabText}>Profile</Text>}
+          <Ionicons name="person" size={24} color={activeTab === "Profile" ? "#59A5D8" : "#9DB2CE"} />
+          {activeTab === "Profile" && <Text style={styles.tabText}>Profile</Text>}
         </TouchableOpacity>
       </View>
     </SafeAreaProvider>
