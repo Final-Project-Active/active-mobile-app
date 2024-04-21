@@ -1,8 +1,30 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
-export default function GenderSelectionScreen({navigation}) {
+export default function GenderSelectionScreen({ navigation, route }) {
+    const [gender, setGender] = useState("male")
+    const [maleBackgroundColor, setMaleBackgroundColor] = useState("#59A5D8");
+    const [femaleBackgroundColor, setFemaleBackgroundColor] = useState("#2C2C2E");
+    const [maleTextColor, setMaleTextColor] = useState("black");
+    const [femaleTextColor, setFemaleTextColor] = useState("white");
+
+    const handleGenderSelection = (genderSelected) => {
+        setGender(genderSelected);
+        if (genderSelected === 'male') {
+            setMaleBackgroundColor("#59A5D8");
+            setFemaleBackgroundColor("#2C2C2E");
+            setMaleTextColor("black");
+            setFemaleTextColor("white");
+        } else {
+            setMaleBackgroundColor("#2C2C2E");
+            setFemaleBackgroundColor("#59A5D8");
+            setMaleTextColor("white");
+            setFemaleTextColor("black");
+        }
+    };
+
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
@@ -13,25 +35,29 @@ export default function GenderSelectionScreen({navigation}) {
                     TO GIVE YOU A BETTER EXPERIENCE, WE NEED{"\n"}TO KNOW YOUR GENDER.
                 </Text>
                 <View style={styles.ellipseContainer}>
-                <TouchableOpacity onPress={() => console.log("Button Pressed")}>
-                        <View style={[styles.ellipse, styles.ellipseMale]}>
-                            {/* <Image source={Image1} style={styles.ellipseImage} /> */}
-                            <Ionicons name="male" size={80} color="black" style={styles.icon} />
-                            <Text style={[styles.genderText, styles.maleText]}>Male</Text>
+                    <TouchableOpacity
+                        onPress={() => handleGenderSelection('male')}
+                    >
+                        <View style={[styles.ellipse, { backgroundColor: maleBackgroundColor }]}>
+                            <Ionicons name="male" size={80} color={maleTextColor} style={styles.icon} />
+                            <Text style={[styles.genderText, { color: maleTextColor }]}>Male</Text>
                         </View>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.ellipseContainer}>
-                    <TouchableOpacity onPress={() => console.log("Button Pressed")}>
-                        <View style={[styles.ellipse, styles.ellipseFemale]}>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.ellipseContainer}>
+                    <TouchableOpacity
+                        onPress={() => handleGenderSelection('female')}
+                    >
+                        <View style={[styles.ellipse, { backgroundColor: femaleBackgroundColor }]}>
                             {/* <Image source={Image1} style={styles.ellipseImage} /> */}
-                            <Ionicons name="female" size={80} color="white" style={styles.icon}/>
-                            <Text style={[styles.genderText, styles.femaleText]}>Female</Text>
+                            <Ionicons name="female" size={80} color={femaleTextColor} style={styles.icon} />
+                            <Text style={[styles.genderText, { color: femaleTextColor }]}>Female</Text>
                         </View>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.buttonsContainer}>
-               <TouchableOpacity style={[styles.button, styles.backButton]} onPress={() => navigation.navigate("SignUpScreen")}>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.buttonsContainer}>
+                    <TouchableOpacity style={[styles.button, styles.backButton]}
+                        onPress={() => navigation.navigate("SignUpScreen", { ...route.params, gender })}>
                         <Ionicons name="chevron-back-outline" size={24} color="white" />
                         <Text style={[styles.buttonText, styles.backButtonText]}>Back</Text>
                     </TouchableOpacity>
@@ -39,7 +65,7 @@ export default function GenderSelectionScreen({navigation}) {
                         <Text style={[styles.buttonText, styles.nextButtonText]}>Next</Text>
                         <Ionicons name="chevron-forward-outline" size={24} color="black" />
                     </TouchableOpacity>
-               </View>
+                </View>
             </SafeAreaView>
         </SafeAreaProvider>
     )
@@ -77,21 +103,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center"
     },
-    ellipseMale: {
-        backgroundColor: "#59A5D8"
-    },
-    ellipseFemale: {
-        backgroundColor: "#2C2C2E"
-    },
     genderText: {
         fontSize: 16,
         fontWeight: "bold"
-    },
-    maleText: {
-        color: "black"
-    },
-    femaleText: {
-        color: "white"
     },
     buttonsContainer: {
         position: "absolute",
