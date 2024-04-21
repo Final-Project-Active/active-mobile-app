@@ -13,6 +13,8 @@ export default function SignUpScreen({ navigation }) {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false)
+
   const handleChange = (name, value) => {
     setUser({ ...user, [name]: value });
   }
@@ -26,6 +28,11 @@ export default function SignUpScreen({ navigation }) {
     });
     navigation.navigate("GenderSelectionScreen", user);
   }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
@@ -73,14 +80,19 @@ export default function SignUpScreen({ navigation }) {
             value={user.email}
             onChangeText={(text) => handleChange("email", text)}
           />
-          <TextInput
-            secureTextEntry={true}
-            placeholder="Password"
-            placeholderTextColor="white"
-            style={styles.input}
-            value={user.password}
-            onChangeText={(text) => handleChange("password", text)}
-          />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              secureTextEntry={!showPassword}
+              placeholder="Password"
+              placeholderTextColor="white"
+              style={styles.input}
+              value={user.password}
+              onChangeText={(text) => handleChange("password", text)}
+            />
+            <TouchableOpacity onPress={togglePasswordVisibility} style={styles.passwordToggle}>
+              <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={24} color="white" />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={[styles.button, styles.nextButton]}
@@ -163,6 +175,14 @@ const styles = StyleSheet.create({
   },
   form: {
     padding: 20,
+  },
+  passwordContainer: {
+    position: "relative"
+  },
+  passwordToggle: {
+    position: "absolute",
+    right: 10,
+    top: 40
   },
   input: {
     height: 70,
