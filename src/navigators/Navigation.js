@@ -10,7 +10,9 @@ import LevelSelectionScreen from "../screens/LevelSelectionScreen";
 import WeightSelectionScreen from "../screens/WeightSelectionScreen";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from "../screens/HomeScreen";
+import NotificationScreen from "../screens/NotificationScreen";
 
 const Stack = createNativeStackNavigator()
 
@@ -18,7 +20,7 @@ export default function navigation() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false }} />
+                {/* <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="AuthOptionsScreen" component={AuthOptionsScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="SignInScreen" component={SignInScreen} options={{ headerShown: false }} />
@@ -27,8 +29,9 @@ export default function navigation() {
                 <Stack.Screen name="HeightSelectionScreen" component={HeightSelectionScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="GoalSelectionScreen" component={GoalSelectionScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="LevelSelectionScreen" component={LevelSelectionScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="WeightSelectionScreen" component={WeightSelectionScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="WeightSelectionScreen" component={WeightSelectionScreen} options={{ headerShown: false }} /> */}
+                {/* <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} /> */}
+                <Stack.Screen name="NotificationScreen" component={NotificationScreen} options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     )
