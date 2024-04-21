@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 
-export default function WeightSelectionScreen({navigation}) {
+export default function WeightSelectionScreen({ navigation, route }) {
   const [selectedNumber, setSelectedNumber] = useState(150)
   const [scrollPosition, setScrollPosition] = useState(0)
 
@@ -29,7 +29,7 @@ export default function WeightSelectionScreen({navigation}) {
     console.log("Clicked number:", number)
   }
 
-  const formatNumber= (number) => {
+  const formatNumber = (number) => {
     return number === selectedNumber ? `${number} kg` : number
   }
 
@@ -73,7 +73,7 @@ export default function WeightSelectionScreen({navigation}) {
                   }]}
                 >
                   <Text style={[styles.numberText, { fontSize: item === selectedNumber ? 24 : 20 }]}>
-                  {formatNumber(item)}
+                    {formatNumber(item)}
                   </Text>
                 </TouchableOpacity>
               )
@@ -85,7 +85,8 @@ export default function WeightSelectionScreen({navigation}) {
             <Ionicons name="chevron-back-outline" size={24} color="white" />
             <Text style={[styles.buttonText, styles.backButtonText]}>Back</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, styles.nextButton]} onPress={() => navigation.navigate("HeightSelectionScreen")}>
+          <TouchableOpacity style={[styles.button, styles.nextButton]}
+            onPress={() => navigation.navigate("HeightSelectionScreen", { ...route.params, weight: selectedNumber })}>
             <Text style={[styles.buttonText, styles.nextButtonText]}>Next</Text>
             <Ionicons name="chevron-forward-outline" size={24} color="black" />
           </TouchableOpacity>
