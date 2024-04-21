@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 
-export default function HeightSelectionScreen({ navigation }) {
+export default function HeightSelectionScreen({ navigation, route }) {
   const [selectedNumber, setSelectedNumber] = useState(150)
   const [scrollPosition, setScrollPosition] = useState(0)
 
@@ -85,7 +85,8 @@ export default function HeightSelectionScreen({ navigation }) {
             <Ionicons name="chevron-back-outline" size={24} color="white" />
             <Text style={[styles.buttonText, styles.backButtonText]}>Back</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, styles.nextButton]} onPress={() => navigation.navigate("GoalSelectionScreen")}>
+          <TouchableOpacity style={[styles.button, styles.nextButton]}
+            onPress={() => navigation.navigate("GoalSelectionScreen", { ...route.params, height: selectedNumber })}>
             <Text style={[styles.buttonText, styles.nextButtonText]}>Next</Text>
             <Ionicons name="chevron-forward-outline" size={24} color="black" />
           </TouchableOpacity>

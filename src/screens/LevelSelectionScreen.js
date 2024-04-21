@@ -2,8 +2,9 @@ import { Ionicons } from "@expo/vector-icons"
 import { useEffect, useState } from "react"
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
+import { serverRequest } from "../utils/axios"
 
-export default function LevelSelectionScreen({navigation}) {
+export default function LevelSelectionScreen({ navigation, route }) {
   const [selectedLevel, setSelectedLevel] = useState("Beginner")
   const [scrollPosition, setScrollPosition] = useState(0)
 
@@ -12,13 +13,27 @@ export default function LevelSelectionScreen({navigation}) {
   useEffect(() => {
     const visibleIndexes = Math.floor(scrollPosition / 60)
     setSelectedLevel(data[visibleIndexes + 2])
-    console.log("Physical activity at center:", data[visibleIndexes + 2])
   }, [scrollPosition])
 
   const handleLevelSelect = (level) => {
     setSelectedLevel(level)
-    console.log("Clicked physical activity:", level)
   }
+
+  console.log({ ...route.params, physicalActivity: selectedLevel })
+  const handleSignUp = async () => {
+    try {
+      const response = await serverRequest({
+        method: "post",
+        url: "/register",
+        data: { ...route.params, physicalActivity: selectedLevel },
+      });
+      console.log(response)
+      navigation.navigate('SignInScreen');
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
@@ -43,7 +58,7 @@ export default function LevelSelectionScreen({navigation}) {
             scrollEventThrottle={16}
           >
             {data.map((item) => {
-              const opacity = selectedLevel === item ? 1 : 0.5  
+              const opacity = selectedLevel === item ? 1 : 0.5
               const adjustedOpacity = Math.max(opacity - 0.3, 0)
               return (
                 <TouchableOpacity
@@ -68,7 +83,8 @@ export default function LevelSelectionScreen({navigation}) {
             <Ionicons name="chevron-back-outline" size={24} color="white" />
             <Text style={[styles.buttonText, styles.backButtonText]}>Back</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, styles.signUpButton]} onPress={() => console.log("Button Pressed")}>
+          <TouchableOpacity style={[styles.button, styles.signUpButton]}
+            onPress={handleSignUp}>
             <Text style={[styles.buttonText, styles.signUpButtonText]}>Sign Up</Text>
             <Ionicons name="chevron-forward-outline" size={24} color="white" />
           </TouchableOpacity>
