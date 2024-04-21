@@ -24,7 +24,7 @@ const data = [
     }
 ]
 
-export default function AuthOptionsScreen() {
+export default function AuthOptionsScreen({ navigation }) {
     const [currentIndex, setCurrentIndex] = useState(0)
 
     const renderItem = ({ item, index }) => (
@@ -64,11 +64,11 @@ export default function AuthOptionsScreen() {
                     <Pagination data={data} currentIndex={currentIndex} />
                 </View>
                 <View style={styles.buttonsContainer}>
-                    <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={() => console.log("Button Pressed")}>
+                    <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={() => { navigation.navigate("SignIn") }}>
                         <Text style={[styles.buttonText, styles.loginButtonText]}>Login</Text>
                         <Ionicons name="chevron-forward-outline" size={24} color="black" />
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, styles.registerButton]} onPress={() => console.log("Button Pressed")}>
+                    <TouchableOpacity style={[styles.button, styles.registerButton]} onPress={() => { navigation.navigate("SignUp") }}>
                         <Text style={[styles.buttonText, styles.registerButtonText]}>Sign Up</Text>
                         <Ionicons name="chevron-forward-outline" size={24} color="white" />
                     </TouchableOpacity>

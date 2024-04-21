@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 
-export default function HeightSelectionScreen({navigation}) {
+export default function HeightSelectionScreen({ navigation }) {
   const [selectedNumber, setSelectedNumber] = useState(150)
   const [scrollPosition, setScrollPosition] = useState(0)
 
@@ -29,7 +29,7 @@ export default function HeightSelectionScreen({navigation}) {
     console.log("Clicked number:", number)
   }
 
-  const formatNumber= (number) => {
+  const formatNumber = (number) => {
     return number === selectedNumber ? `${number} cm` : number
   }
 
@@ -73,7 +73,7 @@ export default function HeightSelectionScreen({navigation}) {
                   }]}
                 >
                   <Text style={[styles.numberText, { fontSize: item === selectedNumber ? 24 : 20 }]}>
-                  {formatNumber(item)}
+                    {formatNumber(item)}
                   </Text>
                 </TouchableOpacity>
               )
