@@ -57,8 +57,8 @@ export default function SignInScreen({ navigation }) {
               <Text style={styles.heading}>Welcome Back</Text>
               <Text style={[styles.heading, styles.bold]}> User,</Text>
             </Text>
-            <Text style={styles.text}>ENTER YOUR INFORMATIONS BELLOW OR</Text>
-            <Text style={styles.text}>LOGIN WITH A OTHER ACCOUNT</Text>
+            <Text style={styles.text}>ENTER YOUR INFORMATION BELOW OR</Text>
+            <Text style={styles.text}>SIGN UP WITH ANOTHER ACCOUNT.</Text>
           </ImageBackground>
         </View>
         <View style={styles.form}>
