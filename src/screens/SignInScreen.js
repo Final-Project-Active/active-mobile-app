@@ -2,9 +2,40 @@ import { Dimensions, ImageBackground, StyleSheet, Text, TextInput, TouchableOpac
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Image9 from "../assets/Image9.png";
 import { MaterialIcons } from '@expo/vector-icons';
+import { serverRequest } from '../utils/axios'
+import { useContext, useState } from "react";
+import AuthContext from '../contexts/authContext';
+import { setItemAsync } from 'expo-secure-store';
 
 const { width } = Dimensions.get("window");
 export default function SignInScreen({ navigation }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { setIsLoggedIn } = useContext(AuthContext);
+
+  const handleLogin = async () => {
+    try {
+      const response = await serverRequest({
+        method: "post",
+        url: "/login",
+        data: { email, password },
+      });
+
+      await setItemAsync('user', JSON.stringify({
+        accessToken: response.data.accessToken
+      }));
+
+      setEmail('');
+      setPassword('');
+      setIsLoggedIn(true);
+
+      navigation.navigate('Home');
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
@@ -35,16 +66,20 @@ export default function SignInScreen({ navigation }) {
             placeholder="Email"
             placeholderTextColor="white"
             style={styles.input}
+            value={email}
+            onChangeText={(text) => setEmail(text)}
           />
           <TextInput
             secureTextEntry={true}
             placeholder="Password"
             placeholderTextColor="white"
             style={styles.input}
+            value={password}
+            onChangeText={(text) => setPassword(text)}
           />
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Login</Text>
             <MaterialIcons name="arrow-right" size={24} color="black" />
           </TouchableOpacity>
