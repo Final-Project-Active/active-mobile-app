@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useState } from "react";
 
 export default function NotificationScreen({ navigation }) {
-    const [activeTab, setActiveTab] = useState("Home")
+    const [activeTab, setActiveTab] = useState("NotificationScreen")
     const [selectedOption, setSelectedOption] = useState("New")
 
     const handleTabPress = (tabName) => {
