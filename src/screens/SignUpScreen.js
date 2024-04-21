@@ -2,9 +2,21 @@ import { Dimensions, ImageBackground, StyleSheet, Text, TextInput, TouchableOpac
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Image9 from "../assets/Image9.png";
 import { Ionicons } from "@expo/vector-icons"
+import { useState } from "react";
 
 const { width } = Dimensions.get("window");
 export default function SignUpScreen({ navigation }) {
+  const [user, setUser] = useState({
+    name: "",
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (name, value) => {
+    setUser({ ...user, [name]: value });
+  }
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
@@ -35,26 +47,36 @@ export default function SignUpScreen({ navigation }) {
             placeholder="Name"
             placeholderTextColor="white"
             style={styles.input}
+            value={user.name}
+            onChangeText={(text) => handleChange("name", text)}
           />
           <TextInput
             placeholder="Username"
             placeholderTextColor="white"
             style={styles.input}
+            value={user.username}
+            onChangeText={(text) => handleChange("username", text)}
           />
           <TextInput
             placeholder="Email"
             placeholderTextColor="white"
             style={styles.input}
+            value={user.email}
+            onChangeText={(text) => handleChange("email", text)}
           />
           <TextInput
             secureTextEntry={true}
             placeholder="Password"
             placeholderTextColor="white"
             style={styles.input}
+            value={user.password}
+            onChangeText={(text) => handleChange("password", text)}
           />
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, styles.nextButton]} onPress={() => navigation.navigate("GenderSelectionScreen")}>
+          <TouchableOpacity style={[styles.button, styles.nextButton]}
+            onPress={() => navigation.navigate("GenderSelectionScreen", user)}
+          >
             <Text style={[styles.buttonText, styles.nextButtonText]}>Next</Text>
             <Ionicons name="chevron-forward-outline" size={24} color="black" />
           </TouchableOpacity>
