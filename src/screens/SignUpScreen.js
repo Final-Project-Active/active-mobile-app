@@ -17,6 +17,15 @@ export default function SignUpScreen({ navigation }) {
     setUser({ ...user, [name]: value });
   }
 
+  const handleNext = () => {
+    setUser({
+      name: "",
+      username: "",
+      email: "",
+      password: "",
+    });
+    navigation.navigate("GenderSelectionScreen", user);
+  }
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
@@ -75,7 +84,7 @@ export default function SignUpScreen({ navigation }) {
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={[styles.button, styles.nextButton]}
-            onPress={() => navigation.navigate("GenderSelectionScreen", user)}
+            onPress={handleNext}
           >
             <Text style={[styles.buttonText, styles.nextButtonText]}>Next</Text>
             <Ionicons name="chevron-forward-outline" size={24} color="black" />
