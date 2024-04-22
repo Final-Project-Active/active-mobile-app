@@ -21,6 +21,8 @@ import ProfileScreen from '../screens/ProfileScreen';
 import AuthContext from '../contexts/authContext';
 import { Entypo, Feather, Ionicons } from '@expo/vector-icons';
 import { Text } from 'react-native';
+import AddPostScreen from '../screens/AddPostScreen';
+import PostDetailScreen from '../screens/PostDetailScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -37,6 +39,14 @@ const AuthStack = () => (
         <Stack.Screen name="GoalSelectionScreen" component={GoalSelectionScreen} options={{ headerShown: false }} />
         <Stack.Screen name="LevelSelectionScreen" component={LevelSelectionScreen} options={{ headerShown: false }} />
         <Stack.Screen name="WeightSelectionScreen" component={WeightSelectionScreen} options={{ headerShown: false }} />
+    </Stack.Navigator>
+)
+
+const CommunityStack = () => (
+    <Stack.Navigator>
+        <Stack.Screen name="CommunityScreen" component={CommunityScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="AddPostScreen" component={AddPostScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="PostDetailScreen" component={PostDetailScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
 )
 
@@ -89,8 +99,8 @@ const MainTabs = () => (
             }
             )} />
         <Tab.Screen
-            name="CommunityScreen"
-            component={CommunityScreen}
+            name="CommunityStack"
+            component={CommunityStack}
             options={({ route }) => ({
                 tabBarIcon: ({ color, size }) => (
                     <Ionicons name="people-circle-outline" size={size} color={color} />
