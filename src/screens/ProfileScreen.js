@@ -12,6 +12,7 @@ export default function ProfileScreen({ navigation }) {
     const [selectedOption, setSelectedOption] = useState("New")
 
     const { setIsLoggedIn } = useContext(AuthContext);
+  
     const handleSignOut = async () => {
         try {
             await deleteItemAsync('user');
@@ -70,10 +71,8 @@ export default function ProfileScreen({ navigation }) {
                     <View style={styles.line}></View>
                     <View style={styles.signOutLine}></View>
                     <View style={styles.profileContainer}>
-                        <TouchableOpacity style={styles.signOutText} onPress={handleSignOut}>
-                            <Text style={styles.signOutText}>
-                                Sign Out
-                            </Text>
+                        <TouchableOpacity onPress={handleSignOut}>
+                            <Text style={styles.signOutText}>Sign Out</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.line}></View>
