@@ -11,6 +11,7 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
     username: "",
     imageUrl: ""
   })
+  const [isLiked, setIsLiked] = useState(false)
 
   const getUserData = async () => {
     try {
@@ -32,9 +33,32 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
     }
   }
 
+  const handleLike = async () => {
+    try {
+      await serverRequest({
+        method: "patch",
+        url: "/like",
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        data: {
+          postId: post._id
+        }
+      })
+
+      setIsLiked(!isLiked)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     getUserData()
+    if (post.likes.length > 0) {
+      setIsLiked(post.likes.includes(userLoggedIn.id))
+    }
   }, [])
+
   return (
     <View style={styles.postContainer}>
       <View style={styles.postHeader}>
@@ -54,9 +78,16 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
 
       <View style={styles.postFooter}>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.likeButton}>
-            <FontAwesome name="heart-o" size={24} color="white" />
-          </TouchableOpacity>
+          {isLiked ? (
+            <TouchableOpacity style={styles.likeButton}>
+              <FontAwesome name="heart" size={24} color="red" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity style={styles.likeButton} onPress={handleLike}>
+              <FontAwesome name="heart-o" size={24} color="white" />
+            </TouchableOpacity>
+          )}
+
           <TouchableOpacity style={styles.commentButton}>
             <FontAwesome6 name="comment" size={24} color="white" />
           </TouchableOpacity>

@@ -9,6 +9,7 @@ export default function CommunityScreen({ navigation }) {
   const [posts, setPosts] = useState([])
   const [token, setToken] = useState("")
   const [userLoggedIn, setUserLoggedIn] = useState({
+    id: "",
     name: "",
     username: "",
     imageUrl: ""
@@ -25,6 +26,7 @@ export default function CommunityScreen({ navigation }) {
         },
       });
       setUserLoggedIn({
+        id: user.data._id,
         name: user.data.name,
         username: user.data.username,
         imageUrl: user.data.imageUrl,
