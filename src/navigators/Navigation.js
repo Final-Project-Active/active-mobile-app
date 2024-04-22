@@ -20,8 +20,20 @@ import AuthContext from '../contexts/authContext';
 const Stack = createNativeStackNavigator();
 
 export default function navigation() {
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+    const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
 
+    useEffect(() => {
+        (async () => {
+            try {
+                const user = JSON.parse(await getItemAsync('user'));
+                if (user) {
+                    setIsLoggedIn(true);
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        })()
+    }, [])
     return (
         <NavigationContainer>
             <Stack.Navigator>
