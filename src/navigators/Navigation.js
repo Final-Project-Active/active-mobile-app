@@ -13,7 +13,7 @@ import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import HomeScreen from '../screens/HomeScreen';
 import AnalyticsScreen from "../screens/AnalyticsScreen";
-// import CommunityScreen from "../screens/CommunityScreen";
+import CommunityScreen from "../screens/CommunityScreen";
 import NotificationScreen from '../screens/NotificationScreen';
 import { useContext, useEffect } from 'react';
 import { getItemAsync } from 'expo-secure-store';
@@ -88,7 +88,7 @@ const MainTabs = () => (
                 headerShown: false
             }
             )} />
-            {/* <Tab.Screen
+        <Tab.Screen
             name="CommunityScreen"
             component={CommunityScreen}
             options={({ route }) => ({
@@ -104,7 +104,7 @@ const MainTabs = () => (
                 },
                 headerShown: false
             }
-            )} /> */}
+            )} />
         <Tab.Screen
             name="NotificationScreen"
             component={NotificationScreen}
@@ -161,15 +161,9 @@ export default function navigation() {
         <NavigationContainer>
             <Stack.Navigator>
                 {isLoggedIn ? (
-
                     <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
-
-
                 ) : (
-
                     <Stack.Screen name="AuthStack" component={AuthStack} options={{ headerShown: false }} />
-
-
                 )}
             </Stack.Navigator>
         </NavigationContainer>

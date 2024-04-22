@@ -15,7 +15,6 @@ export default function ProfileScreen({ navigation }) {
         createdAt: "",
     })
 
-
     const { setIsLoggedIn } = useContext(AuthContext);
 
     const handleSignOut = async () => {
@@ -62,10 +61,12 @@ export default function ProfileScreen({ navigation }) {
                     <View style={styles.profileContainer}>
                         <View style={styles.profileImageContainer}>
                             <View style={styles.profileImage}>
-                                <Image
-                                    source={{ uri: user.imageUrl }}
-                                    style={{ width: 100, height: 100, borderRadius: 50 }}
-                                />
+                                {user.imageUrl !== "" &&
+                                    <Image
+                                        source={{ uri: user.imageUrl }}
+                                        style={{ width: 100, height: 100, borderRadius: 50 }}
+                                    />
+                                }
                             </View>
                         </View>
                         <View style={{ borderLeftWidth: 1, borderLeftColor: "rgba(255, 255, 255, 0.3)", marginLeft: 90 }}>
@@ -73,12 +74,12 @@ export default function ProfileScreen({ navigation }) {
                                 Joined:
                             </Text>
                             <Text style={{ ...styles.joinedText, fontSize: 20, opacity: 0.7 }}>
-                                {calculateTimeAgo(user.createdAt)}
+                                {calculateTimeAgo(user?.createdAt)}
                             </Text>
                         </View>
                     </View>
                     <Text style={styles.profileName}>
-                        {user.name}
+                        {user?.name}
                     </Text>
                     <View style={styles.line}></View>
                     <View style={styles.profileContainer}>
