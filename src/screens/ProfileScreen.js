@@ -1,8 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
-import { Feather, FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useContext, useEffect, useState } from "react";
 import AuthContext from '../contexts/authContext';
 import { deleteItemAsync, getItemAsync } from 'expo-secure-store';
@@ -10,8 +8,6 @@ import { serverRequest } from "../utils/axios";
 import { calculateTimeAgo } from "../utils/helpers";
 
 export default function ProfileScreen({ navigation }) {
-    const [activeTab, setActiveTab] = useState('ProfileScreen')
-    const [selectedOption, setSelectedOption] = useState("New")
     const [user, setUser] = useState({
         id: "",
         name: "",
@@ -31,14 +27,6 @@ export default function ProfileScreen({ navigation }) {
             console.log(error)
         }
     };
-
-    const handleTabPress = (tabName) => {
-        navigation.navigate(tabName, { name: tabName })
-    }
-
-    const handleOptionSelect = (option) => {
-        setSelectedOption(option)
-    }
 
     const getUserData = async () => {
         try {
@@ -129,28 +117,6 @@ export default function ProfileScreen({ navigation }) {
                     <View style={styles.line}></View>
                 </View>
             </SafeAreaView>
-            <View style={styles.bottomTabContainer}>
-                <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("HomeScreen")}>
-                    <Feather name="home" size={24} color={activeTab === "HomeScreen" ? "#59A5D8" : "#9DB2CE"} />
-                    {activeTab === "HomeScreen" && <Text style={styles.tabText}>Home</Text>}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("AnalyticsScreen")}>
-                    <Entypo name="bar-graph" size={24} color={activeTab === "AnalyticsScreen" ? "#59A5D8" : "#9DB2CE"} />
-                    {activeTab === "AnalyticsScreen" && <Text style={styles.tabText}>Analytics</Text>}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("Community")}>
-                    <Ionicons name="people-circle-outline" size={30} color={activeTab === "Community" ? "#59A5D8" : "#9DB2CE"} />
-                    {activeTab === "Community" && <Text style={styles.tabText}>Community</Text>}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("NotificationScreen")}>
-                    <Ionicons name="notifications" size={29} color={activeTab === "NotificationScreen" ? "#59A5D8" : "#9DB2CE"} />
-                    {activeTab === "NotificationScreen" && <Text style={styles.tabText}>Notification</Text>}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("ProfileScreen")}>
-                    <Ionicons name="person" size={24} color={activeTab === "ProfileScreen" ? "#59A5D8" : "#9DB2CE"} />
-                    {activeTab === "ProfileScreen" && <Text style={styles.tabText}>Profile</Text>}
-                </TouchableOpacity>
-            </View>
         </SafeAreaProvider>
     )
 }
@@ -160,8 +126,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "black",
         paddingHorizontal: 20,
-        paddingTop: 20,
-        paddingBottom: 60
+        paddingTop: 20
     },
     header: {
         paddingTop: 30,
@@ -209,27 +174,6 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: "bold",
         textAlign: "center"
-    },
-    bottomTabContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        backgroundColor: "black",
-        padding: 5,
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0
-    },
-    tabItem: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        paddingVertical: 10,
-    },
-    tabText: {
-        color: "#59A5D8",
-        fontSize: 12,
-        marginTop: 5
     },
     line: {
         borderBottomWidth: 1,
