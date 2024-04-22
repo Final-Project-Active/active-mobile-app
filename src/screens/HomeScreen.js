@@ -102,9 +102,9 @@ export default function HomeScreen({ navigation }) {
           <Ionicons name="notifications" size={29} color={activeTab === "NotificationScreen" ? "#59A5D8" : "#9DB2CE"} />
           {activeTab === "NotificationScreen" && <Text style={styles.tabText}>Notification</Text>}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("Profile")}>
-          <Ionicons name="person" size={24} color={activeTab === "Profile" ? "#59A5D8" : "#9DB2CE"} />
-          {activeTab === "Profile" && <Text style={styles.tabText}>Profile</Text>}
+        <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("ProfileScreen")}>
+          <Ionicons name="person" size={24} color={activeTab === "ProfileScreen" ? "#59A5D8" : "#9DB2CE"} />
+          {activeTab === "ProfileScreen" && <Text style={styles.tabText}>Profile</Text>}
         </TouchableOpacity>
       </View>
     </SafeAreaProvider>

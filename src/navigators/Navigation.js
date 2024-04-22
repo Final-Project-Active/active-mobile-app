@@ -10,18 +10,17 @@ import LevelSelectionScreen from "../screens/LevelSelectionScreen";
 import WeightSelectionScreen from "../screens/WeightSelectionScreen";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from "../screens/HomeScreen";
 import NotificationScreen from "../screens/NotificationScreen";
-import { useContext, useEffect, useState } from 'react';
-import AuthContext from '../contexts/authContext';
+import { useEffect, useState } from 'react';
 import { getItemAsync } from "expo-secure-store";
+import ProfileScreen from "../screens/ProfileScreen";
 
 const Stack = createNativeStackNavigator()
 
 export default function navigation() {
-    // const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
     useEffect(() => {
         (async () => {
             try {
@@ -55,6 +54,7 @@ export default function navigation() {
                     <>
                         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="NotificationScreen" component={NotificationScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />
                     </>
                 )}
             </Stack.Navigator>
