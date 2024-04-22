@@ -10,16 +10,17 @@ import { deleteItemAsync } from 'expo-secure-store';
 export default function ProfileScreen({ navigation }) {
     const [activeTab, setActiveTab] = useState('ProfileScreen')
     const [selectedOption, setSelectedOption] = useState("New")
-    
+
     const { setIsLoggedIn } = useContext(AuthContext);
-  const handleSignOut = async () => {
-    try {
-      await deleteItemAsync('user');
-      setIsLoggedIn(false);
-      navigation.navigate('WelcomeScreen')
-    } catch (error) {
-      console.log(error)
-    }
+  
+    const handleSignOut = async () => {
+        try {
+            await deleteItemAsync('user');
+            setIsLoggedIn(false);
+            navigation.navigate('WelcomeScreen')
+        } catch (error) {
+            console.log(error)
+        }
     };
 
     const handleTabPress = (tabName) => {
@@ -38,15 +39,15 @@ export default function ProfileScreen({ navigation }) {
                         <View style={styles.profileImage}></View>
                     </View>
                     <Text style={styles.profileName}>
-                            First Name{"\n"}Last Name
-                        </Text>
+                        First Name{"\n"}Last Name
+                    </Text>
                     <View style={styles.line}></View>
                     <View style={styles.profileContainer}>
                         <Text style={styles.profileText}>
                             Edit Profile
                         </Text>
                         <View style={styles.arrowIconContainer}>
-                        <MaterialIcons name="keyboard-arrow-right" size={24} color="white" />
+                            <MaterialIcons name="keyboard-arrow-right" size={24} color="white" />
                         </View>
                     </View>
                     <View style={styles.line}></View>
@@ -55,7 +56,7 @@ export default function ProfileScreen({ navigation }) {
                             Privacy Policy
                         </Text>
                         <View style={styles.arrowIconContainer}>
-                        <MaterialIcons name="keyboard-arrow-right" size={24} color="white" />
+                            <MaterialIcons name="keyboard-arrow-right" size={24} color="white" />
                         </View>
                     </View>
                     <View style={styles.line}></View>
@@ -64,7 +65,7 @@ export default function ProfileScreen({ navigation }) {
                             Settings
                         </Text>
                         <View style={styles.arrowIconContainer}>
-                        <MaterialIcons name="keyboard-arrow-right" size={24} color="white" />
+                            <MaterialIcons name="keyboard-arrow-right" size={24} color="white" />
                         </View>
                     </View>
                     <View style={styles.line}></View>
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#C4C4C4",
         top: "50%",
         left: "50%",
-        transform: [{translateX: -50}, {translateY: -50}]
+        transform: [{ translateX: -50 }, { translateY: -50 }]
     },
     profileName: {
         fontSize: 24,
