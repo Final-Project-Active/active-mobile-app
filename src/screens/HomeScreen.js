@@ -1,15 +1,11 @@
 import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { LinearGradient } from "expo-linear-gradient"
-import { Feather } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from "react";
 import { serverRequest } from "../utils/axios";
 import { getItemAsync } from "expo-secure-store";
 
 export default function HomeScreen({ navigation }) {
-  const [activeTab, setActiveTab] = useState('HomeScreen')
   const [data, setData] = useState([])
 
   const getTimeOfDay = () => {
@@ -81,10 +77,6 @@ export default function HomeScreen({ navigation }) {
     }
   }
 
-  const handleTabPress = (tabName) => {
-    navigation.navigate(tabName, { name: tabName })
-  }
-
   useEffect(() => {
     getDataWorkouts()
   }, [])
@@ -116,28 +108,6 @@ export default function HomeScreen({ navigation }) {
           contentContainerStyle={styles.flatListContainer}
         />
       </SafeAreaView>
-      <View style={styles.bottomTabContainer}>
-        <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("HomeScreen")}>
-          <Feather name="home" size={24} color={activeTab === "HomeScreen" ? "#59A5D8" : "#9DB2CE"} />
-          {activeTab === "HomeScreen" && <Text style={styles.tabText}>Home</Text>}
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("Analytics")}>
-          <Entypo name="bar-graph" size={24} color={activeTab === "Analytics" ? "#59A5D8" : "#9DB2CE"} />
-          {activeTab === "Analytics" && <Text style={styles.tabText}>Analytics</Text>}
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("CommunityScreen")}>
-          <Ionicons name="people-circle-outline" size={30} color={activeTab === "CommunityScreen" ? "#59A5D8" : "#9DB2CE"} />
-          {activeTab === "CommunityScreen" && <Text style={styles.tabText}>Community</Text>}
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("NotificationScreen")}>
-          <Ionicons name="notifications" size={29} color={activeTab === "NotificationScreen" ? "#59A5D8" : "#9DB2CE"} />
-          {activeTab === "NotificationScreen" && <Text style={styles.tabText}>Notification</Text>}
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("ProfileScreen")}>
-          <Ionicons name="person" size={24} color={activeTab === "ProfileScreen" ? "#59A5D8" : "#9DB2CE"} />
-          {activeTab === "ProfileScreen" && <Text style={styles.tabText}>Profile</Text>}
-        </TouchableOpacity>
-      </View>
     </SafeAreaProvider>
   )
 }
@@ -147,8 +117,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "black",
     paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 60
+    paddingTop: 20
   },
   header: {
     paddingTop: 30,
@@ -219,26 +188,5 @@ const styles = StyleSheet.create({
   flatListContainer: {
     flexGrow: 1,
     paddingBottom: 20
-  },
-  bottomTabContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "black",
-    padding: 5,
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0
-  },
-  tabItem: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 10,
-  },
-  tabText: {
-    color: "#59A5D8",
-    fontSize: 12,
-    marginTop: 5
   }
 })
