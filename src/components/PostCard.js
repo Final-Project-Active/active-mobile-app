@@ -12,6 +12,7 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
     imageUrl: ""
   })
   const [isLiked, setIsLiked] = useState(false)
+  const [likeCount, setLikeCount] = useState(post.likes.length)
 
   const getUserData = async () => {
     try {
@@ -47,6 +48,7 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
       })
 
       setIsLiked(!isLiked)
+      setLikeCount(likeCount + (isLiked ? -1 : 1))
     } catch (error) {
       console.log(error)
     }
@@ -70,12 +72,12 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
         )}
         <Text style={styles.username}>{user.name}</Text>
       </View>
-
-      <Image
-        source={{ uri: post.thumbnail }}
-        style={styles.postImage}
-      />
-
+      <TouchableOpacity onPress={() => navigation.navigate("PostDetailScreen")}>
+        <Image
+          source={{ uri: post.thumbnail }}
+          style={styles.postImage}
+        />
+      </TouchableOpacity>
       <View style={styles.postFooter}>
         <View style={styles.buttonContainer}>
           {isLiked ? (
@@ -92,7 +94,7 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
             <FontAwesome6 name="comment" size={24} color="white" />
           </TouchableOpacity>
         </View>
-        {post.likes.length > 0 && <Text style={styles.likeCount}>{post.likes.length} like{post.likes.length > 1 ? "s" : ""}</Text>}
+        {likeCount > 0 && <Text style={styles.likeCount}>{likeCount} like{likeCount > 1 ? "s" : ""}</Text>}
 
         <View style={styles.captionContainer}>
           <Text style={styles.username}>
@@ -101,7 +103,10 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
         </View>
 
         {post.comments.length > 0 &&
-          <TouchableOpacity style={styles.viewAllCommentsButton} onPress={() => navigation.navigate("PostDetailScreen")}>
+          <TouchableOpacity
+            style={styles.viewAllCommentsButton}
+            onPress={() => navigation.navigate("PostDetailScreen")}
+          >
             <Text style={styles.viewAllCommentsText}>View all {post.comments.length} comment{post.comments.length > 1 ? "s" : ""}</Text>
           </TouchableOpacity>
         }
