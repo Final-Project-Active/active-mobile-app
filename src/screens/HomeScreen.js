@@ -7,6 +7,7 @@ import { getItemAsync } from "expo-secure-store";
 
 export default function HomeScreen({ navigation }) {
   const [data, setData] = useState([])
+  const [name, setName] = useState("")
 
   const getTimeOfDay = () => {
     const currentTime = new Date().getHours()
@@ -62,6 +63,7 @@ export default function HomeScreen({ navigation }) {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      setName(user.data.name);
 
       const response = await serverRequest({
         method: "get",
@@ -88,7 +90,7 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.heading}>
             Hello{" "}
             <Text style={styles.userName}>
-              User,
+              {name},
             </Text>
           </Text>
           <Text style={styles.greeting}>
