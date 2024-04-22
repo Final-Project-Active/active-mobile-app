@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
 import imageLogo from "../assets/Image12.png";
 import PostCard from "../components/PostCard";
@@ -13,13 +12,13 @@ export default function CommunityScreen({ navigation }) {
         />
       </View>
       <View style={styles.separator}></View>
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("AddPostScreen")}>
         <Text style={styles.addButtonText}>Add Post</Text>
       </TouchableOpacity>
       <ScrollView>
-        <PostCard />
-        <PostCard />
-        <PostCard />
+        <PostCard navigation={navigation} />
+        <PostCard navigation={navigation} />
+        <PostCard navigation={navigation} />
       </ScrollView>
     </View>
 

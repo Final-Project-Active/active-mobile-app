@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { FontAwesome6 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 
-export default function PostCard() {
+export default function PostCard({ navigation }) {
   return (
     <View style={styles.postContainer}>
       <View style={styles.postHeader}>
@@ -34,7 +34,7 @@ export default function PostCard() {
           <Text style={styles.caption}>This is the caption of the post.</Text>
         </View>
 
-        <TouchableOpacity style={styles.viewAllCommentsButton}>
+        <TouchableOpacity style={styles.viewAllCommentsButton} onPress={() => navigation.navigate("PostDetailScreen")}>
           <Text style={styles.viewAllCommentsText}>View all 20 comments</Text>
         </TouchableOpacity>
 
