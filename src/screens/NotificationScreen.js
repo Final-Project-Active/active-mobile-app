@@ -1,17 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
-import { Feather, FontAwesome } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 import { useState } from "react";
 
 export default function NotificationScreen({ navigation }) {
-    const [activeTab, setActiveTab] = useState('NotificationScreen')
     const [selectedOption, setSelectedOption] = useState("New")
-
-    const handleTabPress = (tabName) => {
-        navigation.navigate(tabName, { name: tabName })
-    }
 
     const handleOptionSelect = (option) => {
         setSelectedOption(option)
@@ -86,28 +79,6 @@ export default function NotificationScreen({ navigation }) {
 
                 </View>
             </SafeAreaView>
-            <View style={styles.bottomTabContainer}>
-                <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("HomeScreen")}>
-                    <Feather name="home" size={24} color={activeTab === "HomeScreen" ? "#59A5D8" : "#9DB2CE"} />
-                    {activeTab === "HomeScreen" && <Text style={styles.tabText}>Home</Text>}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("AnalyticsScreen")}>
-                    <Entypo name="bar-graph" size={24} color={activeTab === "AnalyticsScreen" ? "#59A5D8" : "#9DB2CE"} />
-                    {activeTab === "AnalyticsScreen" && <Text style={styles.tabText}>Analytics</Text>}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("Community")}>
-                    <Ionicons name="people-circle-outline" size={30} color={activeTab === "Community" ? "#59A5D8" : "#9DB2CE"} />
-                    {activeTab === "Community" && <Text style={styles.tabText}>Community</Text>}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("NotificationScreen")}>
-                    <Ionicons name="notifications" size={29} color={activeTab === "NotificationScreen" ? "#59A5D8" : "#9DB2CE"} />
-                    {activeTab === "NotificationScreen" && <Text style={styles.tabText}>Notification</Text>}
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("ProfileScreen")}>
-                    <Ionicons name="person" size={24} color={activeTab === "ProfileScreen" ? "#59A5D8" : "#9DB2CE"} />
-                    {activeTab === "ProfileScreen" && <Text style={styles.tabText}>Profile</Text>}
-                </TouchableOpacity>
-            </View>
         </SafeAreaProvider>
     )
 }
@@ -117,8 +88,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "black",
         paddingHorizontal: 20,
-        paddingTop: 20,
-        paddingBottom: 60
+        paddingTop: 20
     },
     header: {
         paddingTop: 30,
@@ -146,7 +116,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         padding: 5,
-        width: 100
+        width: 120
     },
     selectedEllipse: {
         backgroundColor: "#59A5D8"
@@ -158,27 +128,6 @@ const styles = StyleSheet.create({
     },
     selectedOptionText: {
         color: "black"
-    },
-    bottomTabContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        backgroundColor: "black",
-        padding: 5,
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0
-    },
-    tabItem: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        paddingVertical: 10,
-    },
-    tabText: {
-        color: "#59A5D8",
-        fontSize: 12,
-        marginTop: 5
     },
     line: {
         borderBottomWidth: 1,
