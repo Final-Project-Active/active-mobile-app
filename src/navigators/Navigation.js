@@ -22,95 +22,30 @@ const Stack = createNativeStackNavigator();
 export default function navigation() {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const user = JSON.parse(await getItemAsync('user'));
-        if (user) {
-          setIsLoggedIn(true);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
-
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        {!isLoggedIn ? (
-          <>
-            <Stack.Screen
-              name='WelcomeScreen'
-              component={WelcomeScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='AuthOptionsScreen'
-              component={AuthOptionsScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='SignUpScreen'
-              component={SignUpScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='SignInScreen'
-              component={SignInScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='GenderSelectionScreen'
-              component={GenderSelectionScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='AgeSelectionScreen'
-              component={AgeSelectionScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='HeightSelectionScreen'
-              component={HeightSelectionScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='GoalSelectionScreen'
-              component={GoalSelectionScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='LevelSelectionScreen'
-              component={LevelSelectionScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='WeightSelectionScreen'
-              component={WeightSelectionScreen}
-              options={{ headerShown: false }}
-            />
-          </>
-        ) : (
-          <>
-            <Stack.Screen
-              name='HomeScreen'
-              component={HomeScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='NotificationScreen'
-              component={NotificationScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='ProfileScreen'
-              component={ProfileScreen}
-              options={{ headerShown: false }}
-            />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+    return (
+        <NavigationContainer>
+            <Stack.Navigator>
+                {!isLoggedIn ? (
+                    <>
+                        <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="AuthOptionsScreen" component={AuthOptionsScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="SignInScreen" component={SignInScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="GenderSelectionScreen" component={GenderSelectionScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="AgeSelectionScreen" component={AgeSelectionScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="HeightSelectionScreen" component={HeightSelectionScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="GoalSelectionScreen" component={GoalSelectionScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="LevelSelectionScreen" component={LevelSelectionScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="WeightSelectionScreen" component={WeightSelectionScreen} options={{ headerShown: false }} />
+                    </>
+                ) : (
+                    <>
+                        <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="NotificationScreen" component={NotificationScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />
+                    </>
+                )}
+            </Stack.Navigator>
+        </NavigationContainer>
+    )
 }
