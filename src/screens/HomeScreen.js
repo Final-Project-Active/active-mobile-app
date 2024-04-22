@@ -8,7 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from "react";
 
 export default function HomeScreen({ navigation }) {
-  const [activeTab, setActiveTab] = useState("HomeScreen")
+  const [activeTab, setActiveTab] = useState('HomeScreen')
 
   const getTimeOfDay = () => {
     const currentTime = new Date().getHours()
@@ -55,8 +55,7 @@ export default function HomeScreen({ navigation }) {
   }
 
   const handleTabPress = (tabName) => {
-    setActiveTab(tabName)
-    navigation.navigate(tabName)
+    navigation.navigate(tabName, { name: tabName })
   }
 
   return (
