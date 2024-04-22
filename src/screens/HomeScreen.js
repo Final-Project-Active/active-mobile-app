@@ -1,14 +1,16 @@
 import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
-import Image10 from "../assets/Image10.png"
 import { LinearGradient } from "expo-linear-gradient"
 import { Feather } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from "react";
+import { serverRequest } from "../utils/axios";
+import { getItemAsync } from "expo-secure-store";
 
 export default function HomeScreen({ navigation }) {
   const [activeTab, setActiveTab] = useState('HomeScreen')
+  const [data, setData] = useState([])
 
   const getTimeOfDay = () => {
     const currentTime = new Date().getHours()
@@ -35,28 +37,50 @@ export default function HomeScreen({ navigation }) {
     return `${day}, ${date} ${month} ${year}`
   }
 
-  const renderCard = () => {
+  const renderCard = (thumbnail, name, time) => {
+    console.log(`http://img.youtube.com/vi/${thumbnail}/hqdefault.jpg`)
+    const image = { uri: `http://img.youtube.com/vi/${thumbnail}/hqdefault.jpg` };
     return (
       <View style={styles.cardContainer}>
         <ImageBackground
-          source={Image10}
+          source={image}
           style={styles.cardBackground}
         >
           <LinearGradient
             colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.7)"]}
             style={styles.linearGradient}
           >
-            <Text style={styles.workoutName}>Hello</Text>
-            <Text style={styles.workoutTime}>| morning</Text>
+            <Text style={styles.workoutName}>{name}</Text>
+            <Text style={styles.workoutTime}>| {time}</Text>
           </LinearGradient>
         </ImageBackground>
       </View>
     )
   }
+  const getDataWorkouts = async () => {
+    try {
+      const user = JSON.parse(await getItemAsync('user'));
+      const response = await serverRequest({
+        method: "get",
+        url: "/workout?category=beginner",
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+      });
+
+      setData(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleTabPress = (tabName) => {
     navigation.navigate(tabName, { name: tabName })
   }
+
+  useEffect(() => {
+    getDataWorkouts()
+  }, [])
 
   return (
     <SafeAreaProvider>
@@ -79,9 +103,9 @@ export default function HomeScreen({ navigation }) {
           </View>
         </View>
         <FlatList
-          data={[1, 2, 3, 4, 5, 6, 7]}
-          renderItem={() => renderCard()}
-          keyExtractor={(item) => item.toString()}
+          data={data}
+          renderItem={({ item }) => renderCard(item.thumbnail, item.name, item.time)}
+          keyExtractor={(item) => item._id}
           contentContainerStyle={styles.flatListContainer}
         />
       </SafeAreaView>
