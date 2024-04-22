@@ -1,18 +1,27 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { Feather, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from '../contexts/authContext';
-import { deleteItemAsync } from 'expo-secure-store';
+import { deleteItemAsync, getItemAsync } from 'expo-secure-store';
+import { serverRequest } from "../utils/axios";
+import { calculateTimeAgo } from "../utils/helpers";
 
 export default function ProfileScreen({ navigation }) {
     const [activeTab, setActiveTab] = useState('ProfileScreen')
     const [selectedOption, setSelectedOption] = useState("New")
+    const [user, setUser] = useState({
+        id: "",
+        name: "",
+        imageUrl: "",
+        createdAt: "",
+    })
+
 
     const { setIsLoggedIn } = useContext(AuthContext);
-  
+
     const handleSignOut = async () => {
         try {
             await deleteItemAsync('user');
@@ -31,15 +40,52 @@ export default function ProfileScreen({ navigation }) {
         setSelectedOption(option)
     }
 
+    const getUserData = async () => {
+        try {
+            const { accessToken } = JSON.parse(await getItemAsync('user'));
+            const user = await serverRequest({
+                method: "get",
+                url: "/user",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+
+            setUser({
+                id: user.data._id,
+                name: user.data.name,
+                imageUrl: user.data.imageUrl,
+                createdAt: user.data.createdAt,
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getUserData()
+    }, [])
+
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
                 <View style={styles.header}>
                     <View style={styles.profileImageContainer}>
-                        <View style={styles.profileImage}></View>
+                        <View style={styles.profileImage}>
+                            <Image
+                                source={{ uri: user.imageUrl }}
+                                style={{ width: 100, height: 100, borderRadius: 50 }}
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.line}>
+                        <Text style={styles.profileText}>
+                            Joined: {calculateTimeAgo(user.createdAt)}
+                        </Text>
                     </View>
                     <Text style={styles.profileName}>
-                        First Name{"\n"}Last Name
+                        {user.name}
                     </Text>
                     <View style={styles.line}></View>
                     <View style={styles.profileContainer}>
