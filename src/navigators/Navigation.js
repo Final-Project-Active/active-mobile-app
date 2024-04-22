@@ -35,8 +35,6 @@ export default function navigation() {
         })()
     }, [])
 
-    console.log(isLoggedIn)
-
     return (
         <NavigationContainer>
             <Stack.Navigator>
