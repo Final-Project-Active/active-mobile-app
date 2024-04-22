@@ -8,10 +8,27 @@ import { useEffect, useState } from "react";
 export default function CommunityScreen({ navigation }) {
   const [posts, setPosts] = useState([])
   const [token, setToken] = useState("")
+  const [userLoggedIn, setUserLoggedIn] = useState({
+    name: "",
+    username: "",
+    imageUrl: ""
+  })
 
   const getPosts = async () => {
     try {
       const { accessToken } = JSON.parse(await getItemAsync('user'));
+      const user = await serverRequest({
+        method: "get",
+        url: "/user",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setUserLoggedIn({
+        name: user.data.name,
+        username: user.data.username,
+        imageUrl: user.data.imageUrl,
+      })
       const response = await serverRequest({
         method: "get",
         url: "/post?page=1&limit=10",
@@ -44,7 +61,13 @@ export default function CommunityScreen({ navigation }) {
       </TouchableOpacity>
       <ScrollView>
         {posts && posts.map((post) => (
-          <PostCard key={post._id} navigation={navigation} post={post} token={token} />
+          <PostCard
+            key={post._id}
+            navigation={navigation}
+            post={post}
+            token={token}
+            userLoggedIn={userLoggedIn}
+          />
         ))}
       </ScrollView>
     </View>

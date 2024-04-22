@@ -5,7 +5,7 @@ import { calculateTimeAgo } from "../utils/helpers";
 import { useEffect, useState } from "react";
 import { serverRequest } from "../utils/axios";
 
-export default function PostCard({ navigation, post, token }) {
+export default function PostCard({ navigation, post, token, userLoggedIn }) {
   const [user, setUser] = useState({
     name: "",
     username: "",
@@ -77,7 +77,7 @@ export default function PostCard({ navigation, post, token }) {
 
         <View style={styles.addCommentContainer}>
           <Image
-            source={{ uri: "https://img.freepik.com/free-vector/cute-monkey-holding-banana-baseball-bat-stick-cartoon-vector-icon-illustration-animal-sport_138676-7050.jpg" }}
+            source={{ uri: userLoggedIn.imageUrl }}
             style={styles.profilePicture}
           />
           <Text style={styles.addComment}>Add comment...</Text>
