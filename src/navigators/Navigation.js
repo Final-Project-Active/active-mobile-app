@@ -13,6 +13,7 @@ import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import HomeScreen from '../screens/HomeScreen';
 import AnalyticsScreen from "../screens/AnalyticsScreen";
+import ProgressFormScreen from "../screens/ProgressFormScreen";
 import CommunityScreen from "../screens/CommunityScreen";
 import NotificationScreen from '../screens/NotificationScreen';
 import { useContext, useEffect } from 'react';
