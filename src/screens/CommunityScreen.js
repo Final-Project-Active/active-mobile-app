@@ -1,8 +1,35 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
 import imageLogo from "../assets/Image12.png";
 import PostCard from "../components/PostCard";
+import { getItemAsync } from "expo-secure-store";
+import { serverRequest } from "../utils/axios";
+import { useEffect, useState } from "react";
 
 export default function CommunityScreen({ navigation }) {
+  const [posts, setPosts] = useState([])
+  const [token, setToken] = useState("")
+
+  const getPosts = async () => {
+    try {
+      const { accessToken } = JSON.parse(await getItemAsync('user'));
+      const response = await serverRequest({
+        method: "get",
+        url: "/post?page=1&limit=10",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      setToken(accessToken)
+      setPosts(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getPosts()
+  }, [])
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -16,9 +43,9 @@ export default function CommunityScreen({ navigation }) {
         <Text style={styles.addButtonText}>Add Post</Text>
       </TouchableOpacity>
       <ScrollView>
-        <PostCard navigation={navigation} />
-        <PostCard navigation={navigation} />
-        <PostCard navigation={navigation} />
+        {posts && posts.map((post) => (
+          <PostCard key={post._id} navigation={navigation} post={post} token={token} />
+        ))}
       </ScrollView>
     </View>
 

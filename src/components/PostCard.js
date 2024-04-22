@@ -1,20 +1,54 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { FontAwesome6 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
+import { calculateTimeAgo } from "../utils/helpers";
+import { useEffect, useState } from "react";
+import { serverRequest } from "../utils/axios";
 
-export default function PostCard({ navigation }) {
+export default function PostCard({ navigation, post, token }) {
+  const [user, setUser] = useState({
+    name: "",
+    username: "",
+    imageUrl: ""
+  })
+
+  const getUserData = async () => {
+    try {
+      const user = await serverRequest({
+        method: "get",
+        url: `/user/${post.userId}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      setUser({
+        name: user.data.name,
+        username: user.data.username,
+        imageUrl: user.data.imageUrl
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getUserData()
+  }, [])
   return (
     <View style={styles.postContainer}>
       <View style={styles.postHeader}>
-        <Image
-          source={{ uri: "https://img.freepik.com/free-vector/cute-monkey-holding-banana-baseball-bat-stick-cartoon-vector-icon-illustration-animal-sport_138676-7050.jpg" }}
-          style={styles.profilePicture}
-        />
-        <Text style={styles.username}>Username</Text>
+        {user.imageUrl !== "" && (
+          <Image
+            source={{ uri: user.imageUrl }}
+            style={styles.profilePicture}
+          />
+        )}
+        <Text style={styles.username}>{user.name}</Text>
       </View>
 
       <Image
-        source={{ uri: "https://img.freepik.com/free-vector/cute-monkey-holding-banana-baseball-bat-stick-cartoon-vector-icon-illustration-animal-sport_138676-7050.jpg" }}
+        source={{ uri: post.thumbnail }}
         style={styles.postImage}
       />
 
@@ -27,16 +61,19 @@ export default function PostCard({ navigation }) {
             <FontAwesome6 name="comment" size={24} color="white" />
           </TouchableOpacity>
         </View>
-        <Text style={styles.likeCount}>10 likes</Text>
+        {post.likes.length > 0 && <Text style={styles.likeCount}>{post.likes.length} like{post.likes.length > 1 ? "s" : ""}</Text>}
 
         <View style={styles.captionContainer}>
-          <Text style={styles.username}>Username</Text>
-          <Text style={styles.caption}>This is the caption of the post.</Text>
+          <Text style={styles.username}>
+            {user.username} <Text style={styles.caption}>{post.caption}</Text>
+          </Text>
         </View>
 
-        <TouchableOpacity style={styles.viewAllCommentsButton} onPress={() => navigation.navigate("PostDetailScreen")}>
-          <Text style={styles.viewAllCommentsText}>View all 20 comments</Text>
-        </TouchableOpacity>
+        {post.comments.length > 0 &&
+          <TouchableOpacity style={styles.viewAllCommentsButton} onPress={() => navigation.navigate("PostDetailScreen")}>
+            <Text style={styles.viewAllCommentsText}>View all {post.comments.length} comment{post.comments.length > 1 ? "s" : ""}</Text>
+          </TouchableOpacity>
+        }
 
         <View style={styles.addCommentContainer}>
           <Image
@@ -46,7 +83,7 @@ export default function PostCard({ navigation }) {
           <Text style={styles.addComment}>Add comment...</Text>
         </View>
       </View>
-      <Text style={styles.postTime}>10 minutes ago</Text>
+      <Text style={styles.postTime}>{calculateTimeAgo(post.createdAt)}</Text>
     </View>
   )
 }
@@ -118,6 +155,7 @@ const styles = StyleSheet.create({
   caption: {
     marginLeft: 5,
     color: "white",
+    fontWeight: "normal",
   },
   addCommentContainer: {
     flexDirection: "row",
