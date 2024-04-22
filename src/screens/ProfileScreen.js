@@ -4,10 +4,23 @@ import { Feather, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from "react";
+import AuthContext from '../contexts/authContext';
+import { deleteItemAsync } from 'expo-secure-store';
 
 export default function ProfileScreen({ navigation }) {
     const [activeTab, setActiveTab] = useState('ProfileScreen')
     const [selectedOption, setSelectedOption] = useState("New")
+    
+    const { setIsLoggedIn } = useContext(AuthContext);
+  const handleSignOut = async () => {
+    try {
+      await deleteItemAsync('user');
+      setIsLoggedIn(false);
+      navigation.navigate('HomeScreen')
+    } catch (error) {
+      console.log(error)
+    }
+    };
 
     const handleTabPress = (tabName) => {
         navigation.navigate(tabName, { name: tabName })
@@ -57,9 +70,9 @@ export default function ProfileScreen({ navigation }) {
                     <View style={styles.line}></View>
                     <View style={styles.signOutLine}></View>
                     <View style={styles.profileContainer}>
-                        <Text style={styles.signOutText}>
+                        <TouchableOpacity style={styles.signOutText} onPress={handleSignOut}>
                             Sign Out
-                        </Text>
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.line}></View>
 

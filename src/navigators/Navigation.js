@@ -1,40 +1,26 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import WelcomeScreen from "../screens/WelcomeScreen";
-import AuthOptionsScreen from "../screens/AuthOptionsScreen";
-import GenderSelectionScreen from "../screens/GenderSelectionScreen";
-import AgeSelectionScreen from "../screens/AgeSelectionScreen";
-import HeightSelectionScreen from "../screens/HeightSelectionScreen";
-import GoalSelectionScreen from "../screens/GoalSelectionScreen";
-import LevelSelectionScreen from "../screens/LevelSelectionScreen";
-import WeightSelectionScreen from "../screens/WeightSelectionScreen";
-import SignInScreen from "../screens/SignInScreen";
-import SignUpScreen from "../screens/SignUpScreen";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from "../screens/HomeScreen";
-import NotificationScreen from "../screens/NotificationScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import { useContext, useEffect, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import WelcomeScreen from '../screens/WelcomeScreen';
+import AuthOptionsScreen from '../screens/AuthOptionsScreen';
+import GenderSelectionScreen from '../screens/GenderSelectionScreen';
+import AgeSelectionScreen from '../screens/AgeSelectionScreen';
+import HeightSelectionScreen from '../screens/HeightSelectionScreen';
+import GoalSelectionScreen from '../screens/GoalSelectionScreen';
+import LevelSelectionScreen from '../screens/LevelSelectionScreen';
+import WeightSelectionScreen from '../screens/WeightSelectionScreen';
+import SignInScreen from '../screens/SignInScreen';
+import SignUpScreen from '../screens/SignUpScreen';
+import HomeScreen from '../screens/HomeScreen';
+import NotificationScreen from '../screens/NotificationScreen';
+import { useContext, useEffect } from 'react';
+import { getItemAsync } from 'expo-secure-store';
+import ProfileScreen from '../screens/ProfileScreen';
 import AuthContext from '../contexts/authContext';
-import { getItemAsync } from "expo-secure-store";
 
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator();
 
 export default function navigation() {
-    // const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    useEffect(() => {
-        (async () => {
-            try {
-                const user = JSON.parse(await getItemAsync('user'));
-                if (user) {
-                    setIsLoggedIn(true);
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        })()
-    }, [])
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
 
     return (
         <NavigationContainer>
