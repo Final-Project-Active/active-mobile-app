@@ -3,7 +3,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { Feather, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import AuthContext from '../contexts/authContext';
 import { deleteItemAsync } from 'expo-secure-store';
 
@@ -16,7 +16,7 @@ export default function ProfileScreen({ navigation }) {
     try {
       await deleteItemAsync('user');
       setIsLoggedIn(false);
-      navigation.navigate('HomeScreen')
+      navigation.navigate('WelcomeScreen')
     } catch (error) {
       console.log(error)
     }
@@ -70,8 +70,8 @@ export default function ProfileScreen({ navigation }) {
                     <View style={styles.line}></View>
                     <View style={styles.signOutLine}></View>
                     <View style={styles.profileContainer}>
-                        <TouchableOpacity style={styles.signOutText} onPress={handleSignOut}>
-                            Sign Out
+                        <TouchableOpacity onPress={handleSignOut}>
+                            <Text style={styles.signOutText}>Sign Out</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.line}></View>
