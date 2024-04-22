@@ -11,6 +11,7 @@ import WeightSelectionScreen from '../screens/WeightSelectionScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import HomeScreen from '../screens/HomeScreen';
+import AnalyticsScreen from "../screens/AnalyticsScreen";
 import NotificationScreen from '../screens/NotificationScreen';
 import { useContext, useEffect } from 'react';
 import { getItemAsync } from 'expo-secure-store';
@@ -53,6 +54,7 @@ export default function navigation() {
                 ) : (
                     <>
                         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="AnalyticsScreen" component={AnalyticsScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="NotificationScreen" component={NotificationScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />
                     </>
