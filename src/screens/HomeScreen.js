@@ -38,7 +38,6 @@ export default function HomeScreen({ navigation }) {
   }
 
   const renderCard = (thumbnail, name, time) => {
-    console.log(`http://img.youtube.com/vi/${thumbnail}/hqdefault.jpg`)
     const image = { uri: `http://img.youtube.com/vi/${thumbnail}/hqdefault.jpg` };
     return (
       <View style={styles.cardContainer}>
