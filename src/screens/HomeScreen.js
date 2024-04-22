@@ -125,9 +125,9 @@ export default function HomeScreen({ navigation }) {
           <Entypo name="bar-graph" size={24} color={activeTab === "Analytics" ? "#59A5D8" : "#9DB2CE"} />
           {activeTab === "Analytics" && <Text style={styles.tabText}>Analytics</Text>}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("Community")}>
-          <Ionicons name="people-circle-outline" size={30} color={activeTab === "Community" ? "#59A5D8" : "#9DB2CE"} />
-          {activeTab === "Community" && <Text style={styles.tabText}>Community</Text>}
+        <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("CommunityScreen")}>
+          <Ionicons name="people-circle-outline" size={30} color={activeTab === "CommunityScreen" ? "#59A5D8" : "#9DB2CE"} />
+          {activeTab === "CommunityScreen" && <Text style={styles.tabText}>Community</Text>}
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("NotificationScreen")}>
           <Ionicons name="notifications" size={29} color={activeTab === "NotificationScreen" ? "#59A5D8" : "#9DB2CE"} />
