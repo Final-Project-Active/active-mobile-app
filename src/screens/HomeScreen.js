@@ -5,7 +5,7 @@ import { LinearGradient } from "expo-linear-gradient"
 import { Feather } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function HomeScreen({ navigation }) {
   const [activeTab, setActiveTab] = useState("HomeScreen")
@@ -89,7 +89,7 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.bottomTabContainer}>
         <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("HomeScreen")}>
           <Feather name="home" size={24} color={activeTab === "HomeScreen" ? "#59A5D8" : "#9DB2CE"} />
-          {activeTab === "Home" && <Text style={styles.tabText}>Home</Text>}
+          {activeTab === "HomeScreen" && <Text style={styles.tabText}>Home</Text>}
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("Analytics")}>
           <Entypo name="bar-graph" size={24} color={activeTab === "Analytics" ? "#59A5D8" : "#9DB2CE"} />
@@ -101,7 +101,7 @@ export default function HomeScreen({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("NotificationScreen")}>
           <Ionicons name="notifications" size={29} color={activeTab === "NotificationScreen" ? "#59A5D8" : "#9DB2CE"} />
-          {activeTab === "Notification" && <Text style={styles.tabText}>Notification</Text>}
+          {activeTab === "NotificationScreen" && <Text style={styles.tabText}>Notification</Text>}
         </TouchableOpacity>
         <TouchableOpacity style={styles.tabItem} onPress={() => handleTabPress("Profile")}>
           <Ionicons name="person" size={24} color={activeTab === "Profile" ? "#59A5D8" : "#9DB2CE"} />
