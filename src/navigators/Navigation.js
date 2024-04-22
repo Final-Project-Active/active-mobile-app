@@ -13,6 +13,7 @@ import SignUpScreen from "../screens/SignUpScreen";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from "../screens/HomeScreen";
 import NotificationScreen from "../screens/NotificationScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from '../contexts/authContext';
 import { getItemAsync } from "expo-secure-store";
@@ -55,6 +56,7 @@ export default function navigation() {
                     <>
                         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
                         <Stack.Screen name="NotificationScreen" component={NotificationScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />
                     </>
                 )}
             </Stack.Navigator>
