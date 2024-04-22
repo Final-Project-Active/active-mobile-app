@@ -58,12 +58,20 @@ export default function HomeScreen({ navigation }) {
   }
   const getDataWorkouts = async () => {
     try {
-      const user = JSON.parse(await getItemAsync('user'));
+      const { accessToken } = JSON.parse(await getItemAsync('user'));
+      const user = await serverRequest({
+        method: "get",
+        url: "/user",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
       const response = await serverRequest({
         method: "get",
-        url: "/workout?category=beginner",
+        url: `/workout?category=${user.data.physicalActivity}`,
         headers: {
-          Authorization: `Bearer ${user.accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
