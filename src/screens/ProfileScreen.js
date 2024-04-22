@@ -71,18 +71,23 @@ export default function ProfileScreen({ navigation }) {
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
                 <View style={styles.header}>
-                    <View style={styles.profileImageContainer}>
-                        <View style={styles.profileImage}>
-                            <Image
-                                source={{ uri: user.imageUrl }}
-                                style={{ width: 100, height: 100, borderRadius: 50 }}
-                            />
+                    <View style={styles.profileContainer}>
+                        <View style={styles.profileImageContainer}>
+                            <View style={styles.profileImage}>
+                                <Image
+                                    source={{ uri: user.imageUrl }}
+                                    style={{ width: 100, height: 100, borderRadius: 50 }}
+                                />
+                            </View>
                         </View>
-                    </View>
-                    <View style={styles.line}>
-                        <Text style={styles.profileText}>
-                            Joined: {calculateTimeAgo(user.createdAt)}
-                        </Text>
+                        <View style={{ borderLeftWidth: 1, borderLeftColor: "rgba(255, 255, 255, 0.3)", marginLeft: 90 }}>
+                            <Text style={{ ...styles.joinedText, marginTop: 50, opacity: 0.3 }}>
+                                Joined:
+                            </Text>
+                            <Text style={{ ...styles.joinedText, fontSize: 20, opacity: 0.7 }}>
+                                {calculateTimeAgo(user.createdAt)}
+                            </Text>
+                        </View>
                     </View>
                     <Text style={styles.profileName}>
                         {user.name}
@@ -122,8 +127,6 @@ export default function ProfileScreen({ navigation }) {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.line}></View>
-
-
                 </View>
             </SafeAreaView>
             <View style={styles.bottomTabContainer}>
@@ -191,6 +194,16 @@ const styles = StyleSheet.create({
         textAlign: "left",
         marginBottom: 20
     },
+    profileContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    line: {
+        borderBottomWidth: 1,
+        borderBottomColor: "gray",
+        marginTop: 10,
+        marginHorizontal: 0,
+    },
     heading: {
         color: "white",
         fontSize: 30,
@@ -229,11 +242,17 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "left"
     },
+    joinedText: {
+        fontWeight: "bold",
+        color: "white",
+        textAlign: "left",
+        marginLeft: 20,
+    },
     profileText: {
         fontWeight: "bold",
         color: "white",
         textAlign: "left",
-        paddingVertical: 10
+        paddingVertical: 10,
     },
     signOutText: {
         fontWeight: "bold",
@@ -251,5 +270,12 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "flex-end",
         paddingVertical: 10
+    },
+    arrowIconJoined: {
+        flex: 1,
+        alignItems: "flex-end",
+        paddingVertical: 10,
+        marginTop: 40,
+        opacity: 0.7
     }
 })
