@@ -182,10 +182,10 @@ const styles = StyleSheet.create({
   passwordToggle: {
     position: "absolute",
     right: 10,
-    top: 40
+    top: 20
   },
   input: {
-    height: 70,
+    height: 60,
     backgroundColor: "black",
     marginBottom: 10,
     padding: 10,
