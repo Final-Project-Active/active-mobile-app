@@ -1,18 +1,27 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { Feather, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from '../contexts/authContext';
-import { deleteItemAsync } from 'expo-secure-store';
+import { deleteItemAsync, getItemAsync } from 'expo-secure-store';
+import { serverRequest } from "../utils/axios";
+import { calculateTimeAgo } from "../utils/helpers";
 
 export default function ProfileScreen({ navigation }) {
     const [activeTab, setActiveTab] = useState('ProfileScreen')
     const [selectedOption, setSelectedOption] = useState("New")
+    const [user, setUser] = useState({
+        id: "",
+        name: "",
+        imageUrl: "",
+        createdAt: "",
+    })
+
 
     const { setIsLoggedIn } = useContext(AuthContext);
-  
+
     const handleSignOut = async () => {
         try {
             await deleteItemAsync('user');
@@ -31,15 +40,57 @@ export default function ProfileScreen({ navigation }) {
         setSelectedOption(option)
     }
 
+    const getUserData = async () => {
+        try {
+            const { accessToken } = JSON.parse(await getItemAsync('user'));
+            const user = await serverRequest({
+                method: "get",
+                url: "/user",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+
+            setUser({
+                id: user.data._id,
+                name: user.data.name,
+                imageUrl: user.data.imageUrl,
+                createdAt: user.data.createdAt,
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getUserData()
+    }, [])
+
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
                 <View style={styles.header}>
-                    <View style={styles.profileImageContainer}>
-                        <View style={styles.profileImage}></View>
+                    <View style={styles.profileContainer}>
+                        <View style={styles.profileImageContainer}>
+                            <View style={styles.profileImage}>
+                                <Image
+                                    source={{ uri: user.imageUrl }}
+                                    style={{ width: 100, height: 100, borderRadius: 50 }}
+                                />
+                            </View>
+                        </View>
+                        <View style={{ borderLeftWidth: 1, borderLeftColor: "rgba(255, 255, 255, 0.3)", marginLeft: 90 }}>
+                            <Text style={{ ...styles.joinedText, marginTop: 50, opacity: 0.3 }}>
+                                Joined:
+                            </Text>
+                            <Text style={{ ...styles.joinedText, fontSize: 20, opacity: 0.7 }}>
+                                {calculateTimeAgo(user.createdAt)}
+                            </Text>
+                        </View>
                     </View>
                     <Text style={styles.profileName}>
-                        First Name{"\n"}Last Name
+                        {user.name}
                     </Text>
                     <View style={styles.line}></View>
                     <View style={styles.profileContainer}>
@@ -76,8 +127,6 @@ export default function ProfileScreen({ navigation }) {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.line}></View>
-
-
                 </View>
             </SafeAreaView>
             <View style={styles.bottomTabContainer}>
@@ -145,6 +194,16 @@ const styles = StyleSheet.create({
         textAlign: "left",
         marginBottom: 20
     },
+    profileContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    line: {
+        borderBottomWidth: 1,
+        borderBottomColor: "gray",
+        marginTop: 10,
+        marginHorizontal: 0,
+    },
     heading: {
         color: "white",
         fontSize: 30,
@@ -183,11 +242,17 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "left"
     },
+    joinedText: {
+        fontWeight: "bold",
+        color: "white",
+        textAlign: "left",
+        marginLeft: 20,
+    },
     profileText: {
         fontWeight: "bold",
         color: "white",
         textAlign: "left",
-        paddingVertical: 10
+        paddingVertical: 10,
     },
     signOutText: {
         fontWeight: "bold",
@@ -205,5 +270,12 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "flex-end",
         paddingVertical: 10
+    },
+    arrowIconJoined: {
+        flex: 1,
+        alignItems: "flex-end",
+        paddingVertical: 10,
+        marginTop: 40,
+        opacity: 0.7
     }
 })
