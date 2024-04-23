@@ -54,6 +54,26 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
     }
   }
 
+  const handleUnlike = async () => {
+    try {
+      await serverRequest({
+        method: "patch",
+        url: "/unlike",
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        data: {
+          postId: post._id
+        }
+      })
+
+      setIsLiked(!isLiked)
+      setLikeCount(likeCount - 1)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     getUserData()
     if (post.likes.length > 0) {
@@ -73,7 +93,9 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
         <Text style={styles.username}>{user.name}</Text>
       </View>
       <TouchableOpacity
-        onPress={() => navigation.navigate("PostDetailScreen", { post, userLoggedIn, likeCount, user, token })}
+        onPress={() => navigation.navigate("PostDetailScreen", {
+          post, userLoggedIn, likeCount, user, token, isLiked, handleUnlike, handleLike
+        })}
       >
         <Image
           source={{ uri: post.thumbnail }}
@@ -83,7 +105,7 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
       <View style={styles.postFooter}>
         <View style={styles.buttonContainer}>
           {isLiked ? (
-            <TouchableOpacity style={styles.likeButton}>
+            <TouchableOpacity style={styles.likeButton} onPress={handleUnlike}>
               <FontAwesome name="heart" size={24} color="red" />
             </TouchableOpacity>
           ) : (
@@ -94,7 +116,9 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
 
           <TouchableOpacity
             style={styles.commentButton}
-            onPress={() => navigation.navigate("PostDetailScreen", { post, userLoggedIn, likeCount, user, token })}
+            onPress={() => navigation.navigate("PostDetailScreen", {
+              post, userLoggedIn, likeCount, user, token, isLiked, handleUnlike, handleLike
+            })}
           >
             <FontAwesome6 name="comment" size={24} color="white" />
           </TouchableOpacity>
@@ -110,7 +134,9 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
         {post.comments.length > 0 &&
           <TouchableOpacity
             style={styles.viewAllCommentsButton}
-            onPress={() => navigation.navigate("PostDetailScreen", { post, userLoggedIn, likeCount, user, token })}
+            onPress={() => navigation.navigate("PostDetailScreen", {
+              post, userLoggedIn, likeCount, user, token, isLiked, handleUnlike, handleLike
+            })}
           >
             <Text style={styles.viewAllCommentsText}>View all {post.comments.length} comment{post.comments.length > 1 ? "s" : ""}</Text>
           </TouchableOpacity>
@@ -122,7 +148,9 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
             style={styles.profilePicture}
           />
           <TouchableOpacity
-            onPress={() => navigation.navigate("PostDetailScreen", { post, userLoggedIn, likeCount, user, token })}
+            onPress={() => navigation.navigate("PostDetailScreen", {
+              post, userLoggedIn, likeCount, user, token, isLiked, handleUnlike, handleLike
+            })}
           >
             <Text style={styles.addComment}>Add comment...</Text>
           </TouchableOpacity>
