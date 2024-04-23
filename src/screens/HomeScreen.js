@@ -61,15 +61,11 @@ export default function HomeScreen({ navigation }) {
           Authorization: `Bearer ${accessToken}`
         }
       })
-      setMyWorkouts(prevWorkouts => {
-        const selectedWorkout = data.find(workout => workout._id === workoutId)
-        return [...prevWorkouts, selectedWorkout]
-      })
+      setMyWorkouts(prev => [...prev, { _id: workoutId }])
     } catch (error) {
       console.log(error)
     }
   }
-
   const renderCard = (thumbnail, name, time, category, workoutId) => {
     const image = { uri: `http://img.youtube.com/vi/${thumbnail}/hqdefault.jpg` };
     const isAdded = myWorkouts.some(workout => workout._id === workoutId)
@@ -122,7 +118,7 @@ export default function HomeScreen({ navigation }) {
 
       const response = await serverRequest({
         method: "get",
-        url: `/workout?category=${user.data.physicalActivity}`,
+        url: `/workout?category=${user.data.physicalActivity.toLowerCase()}`,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -133,8 +129,32 @@ export default function HomeScreen({ navigation }) {
       console.log(error)
     }
   }
+
+  const getUserWorkouts = async () => {
+    try {
+      const { accessToken } = JSON.parse(await getItemAsync('user'));
+      const response = await serverRequest({
+        method: "get",
+        url: "/userWorkout",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const idWorkouts = []
+      for (let i = 0; i < response.data.length; i++) {
+        idWorkouts.push({ _id: response.data[i].workoutId })
+      }
+
+      setMyWorkouts(prev => [...prev, ...idWorkouts])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     getDataWorkouts()
+    getUserWorkouts()
   }, [])
 
   return (
