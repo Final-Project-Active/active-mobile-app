@@ -4,11 +4,13 @@ import { LinearGradient } from "expo-linear-gradient"
 import { useEffect, useState } from "react";
 import { serverRequest } from "../utils/axios";
 import { getItemAsync } from "expo-secure-store";
+import { AsyncStorage } from 'react-native';
 import Image12 from "../assets/Image12.png";
 
 export default function HomeScreen({ navigation }) {
   const [data, setData] = useState([])
   const [name, setName] = useState("")
+  const [myWorkouts, setMyWorkouts] = useState([])
 
   const getTimeOfDay = () => {
     const currentTime = new Date().getHours()
@@ -35,25 +37,52 @@ export default function HomeScreen({ navigation }) {
     return `${day}, ${date} ${month} ${year}`
   }
 
-  const renderCard = (thumbnail, name, time) => {
+  const addToMyWorkout = async (workoutId) => {
+    try {
+      const { accessToken } = JSON.parse(await getItemAsync('user'))
+
+      await serverRequest({
+        method: "post",
+        url: `/userWorkout/${workoutId}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      setMyWorkouts(prevWorkouts => {
+        const selectedWorkout = data.find(workout => workout._id === workoutId)
+        return [...prevWorkouts, selectedWorkout]
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const renderCard = (thumbnail, name, time, workoutId) => {
     const image = { uri: `http://img.youtube.com/vi/${thumbnail}/hqdefault.jpg` };
+    const isAdded = myWorkouts.some(workout => workout._id === workoutId)
     return (
       <View style={styles.cardContainer}>
-        <TouchableOpacity style={styles.plusButtonContainer}>
-          <Text style={styles.plusButtonText}>+</Text>
-        </TouchableOpacity>
-        <ImageBackground
-          source={image}
-          style={styles.cardBackground}
+        {isAdded ? (
+          <View style={styles.addedButtonContainer}>
+          <Text style={styles.addedButtonText}>Added</Text>
+        </View>
+        ) : ( 
+        <TouchableOpacity style={styles.plusButtonContainer} onPress={() => addToMyWorkout(workoutId)}>
+        <Text style={styles.plusButtonText}>+</Text>
+      </TouchableOpacity>
+        )}
+      <ImageBackground
+        source={image}
+        style={styles.cardBackground}
+      >
+        <LinearGradient
+          colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.7)"]}
+          style={styles.linearGradient}
         >
-          <LinearGradient
-            colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.7)"]}
-            style={styles.linearGradient}
-          >
-            <Text style={styles.workoutName}>{name}</Text>
-            <Text style={styles.workoutTime}>| {time}</Text>
-          </LinearGradient>
-        </ImageBackground>
+          <Text style={styles.workoutName}>{name}</Text>
+          <Text style={styles.workoutTime}>| {time}</Text>
+        </LinearGradient>
+      </ImageBackground>
       </View>
     )
   }
@@ -115,7 +144,7 @@ export default function HomeScreen({ navigation }) {
         </View>
         <FlatList
           data={data}
-          renderItem={({ item }) => renderCard(item.thumbnail, item.name, item.time)}
+          renderItem={({ item }) => renderCard(item.thumbnail, item.name, item.time, item._id)}
           keyExtractor={(item) => item._id}
           contentContainerStyle={styles.flatListContainer}
         />
@@ -197,6 +226,22 @@ const styles = StyleSheet.create({
   plusButtonText: {
     color: "white",
     fontSize: 20,
+    fontWeight: "bold",
+  },
+  addedButtonContainer: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    width: 60,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1
+  },
+  addedButtonText: {
+    color: "white",
+    fontSize: 16,
     fontWeight: "bold",
   },
   cardBackground: {
