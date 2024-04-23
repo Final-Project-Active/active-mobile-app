@@ -3,7 +3,8 @@ import imageLogo from "../assets/Image12.png";
 import PostCard from "../components/PostCard";
 import { getItemAsync } from "expo-secure-store";
 import { serverRequest } from "../utils/axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function CommunityScreen({ navigation, route }) {
   const [posts, setPosts] = useState([])
@@ -45,15 +46,21 @@ export default function CommunityScreen({ navigation, route }) {
     }
   }
 
-  useEffect(() => {
-    getPosts();
-  }, []);
+  // useEffect(() => {
+  //   getPosts();
+  // }, []);
 
-  useEffect(() => {
-    if (route.params && route.params.refreshData) {
+  // useEffect(() => {
+  //   if (route.params && route.params.refreshData) {
+  //     getPosts();
+  //   }
+  // }, [route.params]);
+
+  useFocusEffect(
+    React.useCallback(() => {
       getPosts();
-    }
-  }, [route.params]);
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
