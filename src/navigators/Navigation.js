@@ -21,7 +21,6 @@ import { useContext, useEffect } from 'react';
 import { getItemAsync } from 'expo-secure-store';
 import ProfileScreen from '../screens/ProfileScreen';
 import AuthContext from '../contexts/authContext';
-import WorkoutDetail from '../screens/WorkoutDetail';
 import { Entypo, Feather, Ionicons } from '@expo/vector-icons';
 import { Text } from 'react-native';
 import AddPostScreen from '../screens/AddPostScreen';
@@ -189,6 +188,7 @@ export default function navigation() {
                         <Stack.Screen name="AuthStack" component={AuthStack} options={{ headerShown: false }} />
                         <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false }} />
                     </>
+
                 )}
             </Stack.Navigator>
         </NavigationContainer>

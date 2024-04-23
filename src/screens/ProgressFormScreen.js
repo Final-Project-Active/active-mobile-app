@@ -1,13 +1,41 @@
-import { FlatList, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
-import { LinearGradient } from "expo-linear-gradient"
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useEffect, useState } from "react";
 import { serverRequest } from "../utils/axios";
 import { getItemAsync } from "expo-secure-store";
 import { MaterialIcons } from "@expo/vector-icons";
 
 export default function ProgressFormScreen({ navigation }) {
+  const [weight, setWeight] = useState('');
+  const [duration, setDuration] = useState('');
+  const [intensity, setIntensity] = useState('');
+
+  const handleSubmit = async () => {
+    try {
+      const user = await getItemAsync('user');
+      const { accessToken } = JSON.parse(user);
+      console.log(accessToken, "<<<<")
   
+      await serverRequest({
+        method: 'post',
+        url: '/analytics',
+        data: {
+          weight: weight,
+          duration: duration,
+          intensity: intensity
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+      setWeight('');
+      setDuration('');
+      setIntensity('');
+    } catch (error) {
+      console.error('Error submitting analytics:', error);
+    }
+  };
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
@@ -18,60 +46,58 @@ export default function ProgressFormScreen({ navigation }) {
               Assessment
             </Text>
           </Text>
-          
         </View>
         <ScrollView style={styles.form}>
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>What is your current weight (in kg)?</Text>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>What is your current weight (in kg)?</Text>
             <TextInput
-            placeholder=""
-            placeholderTextColor="white"
-            style={styles.input}
-            keyboardType="numeric"
-            // value={user.name}
-            // onChangeText={(text) => handleChange("name", text)}
-          />
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>How long was your fitness duration (in hours)?</Text>
-            <TextInput
-            placeholder=""
-            placeholderTextColor="white"
-            style={styles.input}
-            keyboardType="numeric"
-            // value={user.name}
-            // onChangeText={(text) => handleChange("name", text)}
-          />
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.label}>What your workout intensity (on a scale of 1 - 10)?</Text>
-            <TextInput
-            placeholder=""
-            placeholderTextColor="white"
-            style={styles.input}
-            keyboardType="numeric"
-            // value={user.name}
-            // onChangeText={(text) => handleChange("name", text)}
-          />
-            </View>
-            <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            
-          >
-            <Text style={styles.buttonText}>Submit</Text>
-            <MaterialIcons
-              name='arrow-right'
-              size={24}
-              color='black'
+              placeholder=""
+              placeholderTextColor="white"
+              style={styles.input}
+              keyboardType="numeric"
+              value={weight}
+              onChangeText={setWeight}
             />
-          </TouchableOpacity>
-        </View>
-          </ScrollView>
-        
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>How long was your fitness duration (in hours)?</Text>
+            <TextInput
+              placeholder=""
+              placeholderTextColor="white"
+              style={styles.input}
+              keyboardType="numeric"
+              value={duration}
+              onChangeText={setDuration}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>What your workout intensity (on a scale of 1 - 10)?</Text>
+            <TextInput
+              placeholder=""
+              placeholderTextColor="white"
+              style={styles.input}
+              keyboardType="numeric"
+              value={intensity}
+              onChangeText={setIntensity}
+            />
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleSubmit}
+            >
+              <Text style={styles.buttonText}>Submit</Text>
+              <MaterialIcons
+                name='arrow-right'
+                size={24}
+                color='black'
+              />
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -137,4 +163,10 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     textAlign: 'center',
   },
-})
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+  },
+});
