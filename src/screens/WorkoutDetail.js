@@ -2,29 +2,91 @@ import {
   View,
   Text,
   StyleSheet,
-  ImageBackground,
-  FlatList,
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import Image10 from '../assets/Image10.png';
 import { LinearGradient } from 'expo-linear-gradient';
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useCallback, useEffect, useState } from 'react';
+import { getItemAsync } from "expo-secure-store";
+import { serverRequest } from '../utils/axios';
+import { useRoute } from '@react-navigation/native';
+import YoutubePlayer from "react-native-youtube-iframe";
 
 export default function WorkoutDetail() {
+  const route = useRoute()
+  const {workoutId} = route.params
+  const [workoutDetails, setWorkoutDetails] = useState(null)
+  const [playing, setPlaying] = useState(false);
+
+  const onStateChange = useCallback((state) => {
+    if (state === "ended") {
+      setPlaying(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const getWorkoutDetails = async () => {
+      try {
+        const {accessToken} = JSON.parse(await getItemAsync('user'))
+
+        const response = await serverRequest({
+          method: "get",
+          url: `/workout/${workoutId}`,
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
+        setWorkoutDetails(response.data)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    getWorkoutDetails()
+  }, [workoutId])
+
+  const markAsCompleted = async () => {
+    try {
+      const {accessToken} = JSON.parse(await getItemAsync('user'))
+
+      const response = await serverRequest({
+        method: "put",
+        url: `userworkout/${workoutId}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        },
+        data: {
+          completed: true
+        }
+      })
+
+      setWorkoutDetails(prevDetails => ({
+        ...prevDetails,
+        completed: true
+      }))
+      console.log("Workout marked as completed successfuly!")
+    } catch (error) {
+      console.error("Error marking workout as completed:", error)
+    }
+  }
+
   const banner = () => {
     return (
       <View style={styles.cardContainer}>
-        <ImageBackground
-          source={Image10}
-          style={styles.cardBackground}
-        >
+        <View>
+          {workoutDetails && <YoutubePlayer
+        height={200}
+        play={playing}
+        videoId={workoutDetails?.videos[0].videoUrl}
+        onChangeState={onStateChange}
+      />}
+    </View>
           <LinearGradient
             colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.7)']}
             style={styles.linearGradient}
           />
-        </ImageBackground>
+       
       </View>
     );
   };
@@ -38,7 +100,7 @@ export default function WorkoutDetail() {
             size={20}
             color='white'
           />
-          <Text style={styles.chipsText}>60 min</Text>
+          <Text style={styles.chipsText}>{workoutDetails?.duration}</Text>
         </View>
         <View style={styles.chipsItem}>
           <MaterialIcons
@@ -46,7 +108,7 @@ export default function WorkoutDetail() {
             size={20}
             color='white'
           />
-          <Text style={styles.chipsText}>350 Cal</Text>
+          <Text style={styles.chipsText}>{workoutDetails?.calory}</Text>
         </View>
       </View>
     );
@@ -71,21 +133,20 @@ export default function WorkoutDetail() {
       <SafeAreaView style={styles.container}>
         <View>{banner()}</View>
         <View>
-          <Text style={styles.title}>Day O1 - Warm Up</Text>
+          <Text style={styles.title}>{workoutDetails?.name}</Text>
         </View>
         <View>{chips()}</View>
         <View style={styles.chipsContainer}>
         <View style={styles.chipsItem}>
-          <Text style={styles.chipsText}>beginner</Text>
+          <Text style={styles.chipsText}>{workoutDetails?.category}</Text>
         </View>
         <View style={styles.chipsItem}>
-          <Text style={styles.chipsText}>morning</Text>
+          <Text style={styles.chipsText}>{workoutDetails?.time}</Text>
         </View>
         </View>
         <View>
           <Text style={styles.description}>
-            Want your body to be healthy. Join our program with directions
-            according to body’s goals.
+            {workoutDetails?.videos[0].description}
           </Text>
         </View>
         {/* <FlatList
@@ -96,7 +157,7 @@ export default function WorkoutDetail() {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.button, styles.startButton]}
-            onPress={() => {}}
+            onPress={markAsCompleted}
           >
             <Text style={[styles.buttonText, styles.startButtonText]}>
               Mark as completed
@@ -150,6 +211,7 @@ const styles = StyleSheet.create({
   },
   chipsText: {
     color: 'white',
+    paddingLeft: 5
   },
   cardVideoContainer: {
     backgroundColor: 'white',
@@ -227,7 +289,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     marginHorizontal: 10,
-    top: 150
   },
   startButton: {
     backgroundColor: '#42b0ff',
