@@ -72,27 +72,34 @@ export default function WorkoutDetail() {
         <View>{banner()}</View>
         <View>
           <Text style={styles.title}>Day O1 - Warm Up</Text>
-          <Text style={styles.detail}>04 Workouts for Beginner</Text>
         </View>
         <View>{chips()}</View>
+        <View style={styles.chipsContainer}>
+        <View style={styles.chipsItem}>
+          <Text style={styles.chipsText}>beginner</Text>
+        </View>
+        <View style={styles.chipsItem}>
+          <Text style={styles.chipsText}>morning</Text>
+        </View>
+        </View>
         <View>
           <Text style={styles.description}>
             Want your body to be healthy. Join our program with directions
             according to body’s goals.
           </Text>
         </View>
-        <FlatList
+        {/* <FlatList
           data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
           renderItem={() => cardVideo()}
           keyExtractor={(item) => item.toString()}
-        />
+        /> */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.button, styles.startButton]}
-            onPress={() => { }}
+            onPress={() => {}}
           >
             <Text style={[styles.buttonText, styles.startButtonText]}>
-              Start Workout
+              Mark as completed
             </Text>
           </TouchableOpacity>
         </View>
@@ -110,6 +117,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 24,
     marginHorizontal: 8,
+    marginBottom: 5,
   },
   detail: {
     color: '#244d8f',
@@ -119,7 +127,7 @@ const styles = StyleSheet.create({
   },
   description: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 15,
     marginVertical: 20,
     marginHorizontal: 8,
     lineHeight: 26,
@@ -175,7 +183,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 300,
+    height: 200,
   },
   linearGradient: {
     position: 'absolute',
@@ -219,6 +227,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     marginHorizontal: 10,
+    top: 150
   },
   startButton: {
     backgroundColor: '#42b0ff',
