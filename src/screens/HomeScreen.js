@@ -1,21 +1,16 @@
-import {
-  FlatList,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import Image10 from '../assets/Image10.png';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Feather } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
+import { FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
+import { LinearGradient } from "expo-linear-gradient"
+import { useEffect, useState } from "react";
+import { serverRequest } from "../utils/axios";
+import { getItemAsync } from "expo-secure-store";
+import { AsyncStorage } from 'react-native';
+import Image12 from "../assets/Image12.png";
 
 export default function HomeScreen({ navigation }) {
-  const [activeTab, setActiveTab] = useState('HomeScreen');
+  const [data, setData] = useState([])
+  const [name, setName] = useState("")
+  const [myWorkouts, setMyWorkouts] = useState([])
 
   const getTimeOfDay = () => {
     const currentTime = new Date().getHours();
@@ -55,37 +50,110 @@ export default function HomeScreen({ navigation }) {
     return `${day}, ${date} ${month} ${year}`;
   };
 
-  const renderCard = () => {
+  const addToMyWorkout = async (workoutId) => {
+    try {
+      const { accessToken } = JSON.parse(await getItemAsync('user'))
+
+      await serverRequest({
+        method: "post",
+        url: `/userWorkout/${workoutId}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      setMyWorkouts(prevWorkouts => {
+        const selectedWorkout = data.find(workout => workout._id === workoutId)
+        return [...prevWorkouts, selectedWorkout]
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const renderCard = (thumbnail, name, time, category, workoutId) => {
+    const image = { uri: `http://img.youtube.com/vi/${thumbnail}/hqdefault.jpg` };
+    const isAdded = myWorkouts.some(workout => workout._id === workoutId)
     return (
       <View style={styles.cardContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('WorkoutDetail')}>
-          <ImageBackground
-            source={Image10}
-            style={styles.cardBackground}
-          >
-            <LinearGradient
-              colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.7)']}
-              style={styles.linearGradient}
-            >
-              <Text style={styles.workoutName}>Hello</Text>
-              <Text style={styles.workoutTime}>| morning</Text>
-            </LinearGradient>
-          </ImageBackground>
-        </TouchableOpacity>
+        {isAdded ? (
+          <View style={styles.addedButtonContainer}>
+          <Text style={styles.addedButtonText}>Added</Text>
+        </View>
+        ) : ( 
+        <TouchableOpacity style={styles.plusButtonContainer} onPress={() => addToMyWorkout(workoutId)}>
+        <Text style={styles.plusButtonText}>+</Text>
+      </TouchableOpacity>
+        )}
+      <ImageBackground
+        source={image}
+        style={styles.cardBackground}
+      >
+        <LinearGradient
+          colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.7)"]}
+          style={styles.linearGradient}
+        >
+          <Text style={styles.workoutName}>{name}</Text>
+          <View style={styles.badgeContainer}>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{time}</Text>
+            </View>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{category}</Text>
+            </View>
+          </View>
+        </LinearGradient>
+      </ImageBackground>
       </View>
-    );
-  };
+    )
+  }
+  const getDataWorkouts = async () => {
+    try {
+      const { accessToken } = JSON.parse(await getItemAsync('user'));
+      const user = await serverRequest({
+        method: "get",
+        url: "/user",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setName(user.data.name);
 
-  const handleTabPress = (tabName) => {
-    navigation.navigate(tabName, { name: tabName });
-  };
+      const response = await serverRequest({
+        method: "get",
+        url: `/workout?category=${user.data.physicalActivity}`,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      setData(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    getDataWorkouts()
+  }, [])
 
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
+        <View style={styles.logoContainer}>
+                    <Image source={Image12} style={styles.logo} />
+                    <TouchableOpacity onPress={() => navigation.navigate("UserWorkoutScreen")}>
+            <Text style={styles.myWorkoutText}>My Workout</Text>
+          </TouchableOpacity>
+                </View>
           <Text style={styles.heading}>
-            Hello <Text style={styles.userName}>User,</Text>
+
+            Hello{" "}
+            <Text style={styles.userName}>
+              {name},
+            </Text>
+          </Text>
+          <Text style={styles.greeting}>
+            {getTimeOfDay()}
           </Text>
           <Text style={styles.greeting}>{getTimeOfDay()}</Text>
           <View style={styles.workoutPlanContainer}>
@@ -96,79 +164,12 @@ export default function HomeScreen({ navigation }) {
           </View>
         </View>
         <FlatList
-          data={[1, 2, 3, 4, 5, 6, 7]}
-          renderItem={() => renderCard()}
-          keyExtractor={(item) => item.toString()}
+          data={data}
+          renderItem={({ item }) => renderCard(item.thumbnail, item.name, item.time, item.category, item._id)}
+          keyExtractor={(item) => item._id}
           contentContainerStyle={styles.flatListContainer}
         />
       </SafeAreaView>
-      <View style={styles.bottomTabContainer}>
-        <TouchableOpacity
-          style={styles.tabItem}
-          onPress={() => handleTabPress('HomeScreen')}
-        >
-          <Feather
-            name='home'
-            size={24}
-            color={activeTab === 'HomeScreen' ? '#59A5D8' : '#9DB2CE'}
-          />
-          {activeTab === 'HomeScreen' && (
-            <Text style={styles.tabText}>Home</Text>
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.tabItem}
-          onPress={() => handleTabPress('Analytics')}
-        >
-          <Entypo
-            name='bar-graph'
-            size={24}
-            color={activeTab === 'Analytics' ? '#59A5D8' : '#9DB2CE'}
-          />
-          {activeTab === 'Analytics' && (
-            <Text style={styles.tabText}>Analytics</Text>
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.tabItem}
-          onPress={() => handleTabPress('Community')}
-        >
-          <Ionicons
-            name='people-circle-outline'
-            size={30}
-            color={activeTab === 'Community' ? '#59A5D8' : '#9DB2CE'}
-          />
-          {activeTab === 'Community' && (
-            <Text style={styles.tabText}>Community</Text>
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.tabItem}
-          onPress={() => handleTabPress('NotificationScreen')}
-        >
-          <Ionicons
-            name='notifications'
-            size={29}
-            color={activeTab === 'NotificationScreen' ? '#59A5D8' : '#9DB2CE'}
-          />
-          {activeTab === 'NotificationScreen' && (
-            <Text style={styles.tabText}>Notification</Text>
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.tabItem}
-          onPress={() => handleTabPress('ProfileScreen')}
-        >
-          <Ionicons
-            name='person'
-            size={24}
-            color={activeTab === 'ProfileScreen' ? '#59A5D8' : '#9DB2CE'}
-          />
-          {activeTab === 'ProfileScreen' && (
-            <Text style={styles.tabText}>Profile</Text>
-          )}
-        </TouchableOpacity>
-      </View>
     </SafeAreaProvider>
   );
 }
@@ -178,11 +179,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'black',
     paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 60,
+    paddingTop: 20
   },
   header: {
-    paddingTop: 30,
+    paddingTop: 10,
+  },
+  logoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingBottom: 20
+  },
+  logo: {
+    left: -20
+  },
+  myWorkoutText: {
+    color: "#59A5D8",
+    fontWeight: "bold",
+    paddingBottom: 10,
+    textAlign: "right"
   },
   heading: {
     color: 'white',
@@ -217,6 +232,39 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
   },
+  plusButtonContainer: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    backgroundColor: "#59A5D8",
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1
+  },
+  plusButtonText: {
+    color: "white",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  addedButtonContainer: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    width: 60,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1
+  },
+  addedButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
   cardBackground: {
     width: '100%',
     height: 200,
@@ -244,32 +292,35 @@ const styles = StyleSheet.create({
   workoutTime: {
     color: '#59A5D8',
     fontSize: 15,
-    marginTop: 5,
-    marginLeft: 20,
+    marginTop: 0,
+    marginLeft: 20
+  },
+  workoutCategory: {
+    color: "#59A5D8",
+    fontSize: 15,
+    marginTop: -5,
+    marginLeft: 20
   },
   flatListContainer: {
     flexGrow: 1,
     paddingBottom: 20,
   },
-  bottomTabContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: 'black',
-    padding: 5,
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
-  tabItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-  },
-  tabText: {
-    color: '#59A5D8',
-    fontSize: 12,
+  badgeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 5,
+    maxWidth: 150,
+    paddingLeft: 20
   },
-});
+  badge: {
+    backgroundColor: "#333333",
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+    marginRight: 5
+  },
+  badgeText: {
+    color: "#FFFFFF",
+    fontSize: 12
+  }
+})

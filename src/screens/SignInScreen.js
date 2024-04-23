@@ -41,7 +41,7 @@ export default function SignInScreen({ navigation }) {
       setPassword('');
       setIsLoggedIn(true);
 
-      navigation.navigate('WelcomeScreen');
+      navigation.navigate('MainTabs');
     } catch (error) {
       console.log(error);
     }
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   input: {
-    height: 70,
+    height: 60,
     backgroundColor: 'black',
     marginBottom: 10,
     padding: 10,
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   passwordToggle: {
     position: 'absolute',
     right: 10,
-    top: 40,
+    top: 20,
   },
   buttonContainer: {
     flexDirection: 'row',
