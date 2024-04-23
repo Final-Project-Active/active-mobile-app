@@ -7,16 +7,11 @@ import { serverRequest } from "../utils/axios";
 import { getItemAsync } from "expo-secure-store";
 
 export default function AnalyticsScreen({ navigation }) {
-    const [selectedOption, setSelectedOption] = useState("W1")
     const [currentDate, setCurrentDate] = useState(new Date())
 
     const [weightData, setWeightData] = useState([])
     const [durationData, setDurationData] = useState([])
     const [intensityData, setIntensityData] = useState([])
-
-    const handleOptionSelect = (option) => {
-        setSelectedOption(option)
-    }
 
     const handleLeftArrowPress = () => {
         const updatedDate = new Date(currentDate)
@@ -34,22 +29,6 @@ export default function AnalyticsScreen({ navigation }) {
     const currentMonth = monthNames[currentDate.getMonth()]
     const currentYear = currentDate.getFullYear()
     const formattedDate = `${currentMonth} ${currentYear}`
-
-    const generateOvalContainers = () => {
-        const weeksInMonth = 4;
-        const ovalContainers = [];
-        for (let i = 1; i <= weeksInMonth; i++) {
-            ovalContainers.push(
-                <TouchableOpacity
-                    key={`week${i}`}
-                    style={[styles.ellipse, selectedOption === `W${i}` ? styles.selectedEllipse : styles.unselectedEllipse]}
-                    onPress={() => handleOptionSelect(`W${i}`)}>
-                    <Text style={[styles.optionText, selectedOption === `W${i}` && styles.selectedOptionText]}>W{"\n"}{i}</Text>
-                </TouchableOpacity>
-            );
-        }
-        return ovalContainers;
-    };
 
     const renderLineChart = ({ item }) => {
         return (
@@ -185,23 +164,30 @@ export default function AnalyticsScreen({ navigation }) {
                 }
             })
 
-            if (res.data.length >= 4) {
-                const weight = []
-                const duration = []
-                const instensity = []
-                for (let i = 0; i < 4; i++) {
-                    // setWeightData(prev => [...prev, res.data[i].currentWeight])
-                    // setDurationData(prev => [...prev, res.data[i].duration])
-                    // setIntensityData(prev => [...prev, res.data[i].intensity])
+            const weight = []
+            const duration = []
+            const instensity = []
+            const monthSelected = monthNames.findIndex(month => month === currentMonth) + 1
+            let countData = 0;
 
+            for (let i = 0; i < res.data.length; i++) {
+                // setWeightData(prev => [...prev, res.data[i].currentWeight])
+                // setDurationData(prev => [...prev, res.data[i].duration])
+                // setIntensityData(prev => [...prev, res.data[i].intensity])
+
+                const date = new Date(res.data[i].createdAt);
+                const month = date.getMonth() + 1;
+                if (month === monthSelected && countData < 4) {
                     weight.push(res.data[i].currentWeight)
                     duration.push(res.data[i].duration)
                     instensity.push(res.data[i].intensity)
+                    countData++;
                 }
-                setWeightData([...weight])
-                setDurationData([...duration])
-                setIntensityData([...instensity])
             }
+            setWeightData([...weight])
+            setDurationData([...duration])
+            setIntensityData([...instensity])
+
         } catch (error) {
             console.log(error)
         }
@@ -209,26 +195,21 @@ export default function AnalyticsScreen({ navigation }) {
 
     useEffect(() => {
         getAnalytics()
-    }, [])
+    }, [currentDate])
 
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
+                <View style={styles.header}>
+                    <TouchableOpacity style={{ marginTop: 20 }} onPress={handleLeftArrowPress}>
+                        <MaterialIcons name="keyboard-arrow-left" size={30} color="white" style={{ marginRight: 10 }} />
+                    </TouchableOpacity>
+                    <Text style={styles.heading}>{formattedDate}</Text>
+                    <TouchableOpacity style={{ marginTop: 20 }} onPress={handleRightArrowPress}>
+                        <MaterialIcons name="keyboard-arrow-right" size={30} color="white" style={{ marginLeft: 10 }} />
+                    </TouchableOpacity>
+                </View>
                 {(weightData.length > 0 && durationData.length > 0 && intensityData.length > 0) ? (<>
-                    <View style={styles.header}>
-                        <TouchableOpacity style={{ marginTop: 20 }} onPress={handleLeftArrowPress}>
-                            <MaterialIcons name="keyboard-arrow-left" size={30} color="white" style={{ marginRight: 10 }} />
-                        </TouchableOpacity>
-                        <Text style={styles.heading}>{formattedDate}</Text>
-                        <TouchableOpacity style={{ marginTop: 20 }} onPress={handleRightArrowPress}>
-                            <MaterialIcons name="keyboard-arrow-right" size={30} color="white" style={{ marginLeft: 10 }} />
-                        </TouchableOpacity>
-
-                    </View>
-                    <View style={styles.ellipseContainer}>
-                        {generateOvalContainers()}
-                    </View>
-
                     <FlatList
                         data={lineCharts}
                         renderItem={renderLineChart}
@@ -253,7 +234,7 @@ const styles = StyleSheet.create({
         paddingTop: 0
     },
     header: {
-        height: 180,
+        height: 100,
         backgroundColor: "#2C2C2E",
         borderBottomLeftRadius: 50,
         borderBottomRightRadius: 50,
