@@ -6,35 +6,35 @@ import { getItemAsync } from "expo-secure-store";
 import { MaterialIcons } from "@expo/vector-icons";
 
 export default function ProgressFormScreen({ navigation }) {
-  const [weight, setWeight] = useState('');
-  const [duration, setDuration] = useState('');
-  const [intensity, setIntensity] = useState('');
+  const [currentWeight, setCurrentWeight] = useState("")
+  const [duration, setDuration] = useState("")
+  const [intensity, setIntensity] = useState("")
 
   const handleSubmit = async () => {
     try {
-      const user = await getItemAsync('user');
-      const { accessToken } = JSON.parse(user);
-      console.log(accessToken, "<<<<")
-  
-      await serverRequest({
+      const user = await getItemAsync('user')
+      const { accessToken } = JSON.parse(user)
+
+      const response = await serverRequest({
         method: 'post',
-        url: '/analytics',
+        url: "/analytics",
         data: {
-          weight: weight,
-          duration: duration,
-          intensity: intensity
+          currentWeight: parseFloat(currentWeight),
+          duration: parseFloat(duration),
+          intensity: parseFloat(intensity)
         },
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
-      });
-      setWeight('');
-      setDuration('');
-      setIntensity('');
+      })
+      console.log(response.data, "<<< response")
+      setCurrentWeight('')
+      setDuration('')
+      setIntensity('')
     } catch (error) {
-      console.error('Error submitting analytics:', error);
+      console.error("Error submitting analytics:", error)
     }
-  };
+  }
 
   return (
     <SafeAreaProvider>
@@ -55,8 +55,8 @@ export default function ProgressFormScreen({ navigation }) {
               placeholderTextColor="white"
               style={styles.input}
               keyboardType="numeric"
-              value={weight}
-              onChangeText={setWeight}
+              value={currentWeight}
+              onChangeText={setCurrentWeight}
             />
           </View>
           <View style={styles.inputContainer}>

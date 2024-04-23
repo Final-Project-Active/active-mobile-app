@@ -12,6 +12,7 @@ import WeightSelectionScreen from '../screens/WeightSelectionScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import HomeScreen from '../screens/HomeScreen';
+import WorkoutDetail from "../screens/WorkoutDetail";
 import UserWorkoutScreen from "../screens/UserWorkoutScreen";
 import AnalyticsScreen from "../screens/AnalyticsScreen";
 import ProgressFormScreen from "../screens/ProgressFormScreen";
