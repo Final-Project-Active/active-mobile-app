@@ -12,6 +12,7 @@ import WeightSelectionScreen from '../screens/WeightSelectionScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import HomeScreen from '../screens/HomeScreen';
+import UserWorkoutScreen from "../screens/UserWorkoutScreen";
 import AnalyticsScreen from "../screens/AnalyticsScreen";
 import ProgressFormScreen from "../screens/ProgressFormScreen";
 import CommunityScreen from "../screens/CommunityScreen";
@@ -51,6 +52,14 @@ const CommunityStack = () => (
     </Stack.Navigator>
 )
 
+const HomeStack = () => (
+    <Stack.Navigator>
+        <Stack.Screen name="HomeScreen" component={HomeScreen} options={{headerShown: false }} />
+        <Stack.Screen name="UserWorkoutScreen" component={UserWorkoutScreen} options={{headerShown: false }} />
+    </Stack.Navigator>
+)
+
+
 const MainTabs = () => (
     <Tab.Navigator
         screenOptions={{
@@ -66,8 +75,8 @@ const MainTabs = () => (
         }}
     >
         <Tab.Screen
-            name="HomeScreen"
-            component={HomeScreen}
+            name="HomeStack"
+            component={HomeStack}
             options={({ route }) => ({
                 tabBarIcon: ({ color, size }) => (
                     <Feather name="home" size={size} color={color} />
