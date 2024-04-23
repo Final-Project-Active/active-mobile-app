@@ -7,9 +7,11 @@ import { serverRequest } from "../utils/axios";
 import { useState } from "react";
 
 export default function PostDetailScreen({ navigation, route }) {
-  const { post, likeCount, user, token, userLoggedIn, isLiked, handleUnlike, handleLike } = route.params
+  const { post, likeCount, user, token, userLoggedIn, isLiked, setIsLiked, setLikeCount } = route.params
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState(post.comments)
+  const [isLikedDetail, setIsLikedDetail] = useState(isLiked)
+  const [likeCountDetail, setLikeCountDetail] = useState(likeCount)
 
   const handleAddComment = async () => {
     try {
@@ -31,6 +33,51 @@ export default function PostDetailScreen({ navigation, route }) {
       console.log(error)
     }
   }
+
+  const handleLikeDetail = async () => {
+    try {
+      await serverRequest({
+        method: "patch",
+        url: "/like",
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        data: {
+          postId: post._id
+        }
+      })
+
+      setLikeCountDetail(likeCountDetail + 1)
+      setIsLikedDetail(true)
+      setIsLiked(true)
+      setLikeCount(likeCountDetail + 1)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleUnlikeDetail = async () => {
+    try {
+      await serverRequest({
+        method: "patch",
+        url: "/unlike",
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        data: {
+          postId: post._id
+        }
+      })
+
+      setLikeCountDetail(likeCountDetail - 1)
+      setIsLikedDetail(false)
+      setIsLiked(false)
+      setLikeCount(likeCountDetail - 1)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -56,12 +103,12 @@ export default function PostDetailScreen({ navigation, route }) {
 
         <View style={styles.postFooter}>
           <View style={styles.buttonContainer}>
-            {isLiked ? (
-              <TouchableOpacity style={styles.likeButton} onPress={handleUnlike}>
+            {isLikedDetail ? (
+              <TouchableOpacity style={styles.likeButton} onPress={handleUnlikeDetail}>
                 <FontAwesome name="heart" size={24} color="red" />
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity style={styles.likeButton} onPress={handleLike}>
+              <TouchableOpacity style={styles.likeButton} onPress={handleLikeDetail}>
                 <FontAwesome name="heart-o" size={24} color="white" />
               </TouchableOpacity>
             )}
@@ -69,7 +116,7 @@ export default function PostDetailScreen({ navigation, route }) {
               <FontAwesome6 name="comment" size={24} color="white" />
             </TouchableOpacity>
           </View>
-          {likeCount > 0 && <Text style={styles.likeCount}>{likeCount} like{likeCount > 1 ? "s" : ""}</Text>}
+          {likeCountDetail > 0 && <Text style={styles.likeCount}>{likeCountDetail} like{likeCountDetail > 1 ? "s" : ""}</Text>}
 
           <View style={styles.captionContainer}>
             <Text style={styles.username}>{user.username}{" "}
