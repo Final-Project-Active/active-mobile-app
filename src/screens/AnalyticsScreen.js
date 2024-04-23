@@ -185,23 +185,21 @@ export default function AnalyticsScreen({ navigation }) {
                 }
             })
 
-            if (res.data.length >= 4) {
-                const weight = []
-                const duration = []
-                const instensity = []
-                for (let i = 0; i < 4; i++) {
-                    // setWeightData(prev => [...prev, res.data[i].currentWeight])
-                    // setDurationData(prev => [...prev, res.data[i].duration])
-                    // setIntensityData(prev => [...prev, res.data[i].intensity])
+            const weight = []
+            const duration = []
+            const instensity = []
+            for (let i = 0; i < res.data.length; i++) {
+                // setWeightData(prev => [...prev, res.data[i].currentWeight])
+                // setDurationData(prev => [...prev, res.data[i].duration])
+                // setIntensityData(prev => [...prev, res.data[i].intensity])
 
-                    weight.push(res.data[i].currentWeight)
-                    duration.push(res.data[i].duration)
-                    instensity.push(res.data[i].intensity)
-                }
-                setWeightData([...weight])
-                setDurationData([...duration])
-                setIntensityData([...instensity])
+                weight.push(res.data[i].currentWeight)
+                duration.push(res.data[i].duration)
+                instensity.push(res.data[i].intensity)
             }
+            setWeightData([...weight])
+            setDurationData([...duration])
+            setIntensityData([...instensity])
         } catch (error) {
             console.log(error)
         }

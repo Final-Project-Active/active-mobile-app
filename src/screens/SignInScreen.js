@@ -41,7 +41,7 @@ export default function SignInScreen({ navigation }) {
       setPassword('');
       setIsLoggedIn(true);
 
-      navigation.navigate('HomeScreen');
+      navigation.navigate('MainTabs');
     } catch (error) {
       console.log(error);
     }
