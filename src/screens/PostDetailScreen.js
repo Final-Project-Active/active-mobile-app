@@ -4,12 +4,8 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import Comment from "../components/Comment";
 
-export default function PostDetailScreen({ navigation }) {
-  const comments = [
-    { id: 1, username: "User1", comment: "Comment 1" },
-    { id: 2, username: "User2", comment: "Comment 2" },
-    { id: 3, username: "User3", comment: "Comment 3" },
-  ];
+export default function PostDetailScreen({ navigation, route }) {
+  const { post, userLoggedIn, likeCount, user, token } = route.params
 
   return (
     <View style={styles.container}>
@@ -23,14 +19,14 @@ export default function PostDetailScreen({ navigation }) {
       <ScrollView>
         <View style={styles.postHeader}>
           <Image
-            source={{ uri: "https://img.freepik.com/free-vector/cute-monkey-holding-banana-baseball-bat-stick-cartoon-vector-icon-illustration-animal-sport_138676-7050.jpg" }}
+            source={{ uri: user.imageUrl }}
             style={styles.profilePicture}
           />
-          <Text style={styles.username}>Username</Text>
+          <Text style={styles.username}>{user.name}</Text>
         </View>
 
         <Image
-          source={{ uri: "https://img.freepik.com/free-vector/cute-monkey-holding-banana-baseball-bat-stick-cartoon-vector-icon-illustration-animal-sport_138676-7050.jpg" }}
+          source={{ uri: post.thumbnail }}
           style={styles.postImage}
         />
 
@@ -43,24 +39,19 @@ export default function PostDetailScreen({ navigation }) {
               <FontAwesome6 name="comment" size={24} color="white" />
             </TouchableOpacity>
           </View>
-          <Text style={styles.likeCount}>10 likes</Text>
+          {likeCount > 0 && <Text style={styles.likeCount}>{likeCount} like{likeCount > 1 ? "s" : ""}</Text>}
 
           <View style={styles.captionContainer}>
-            <Text style={styles.username}>Username</Text>
-            <Text style={styles.caption}>This is the caption of the post.</Text>
+            <Text style={styles.username}>{user.username}{" "}
+              <Text style={styles.caption}>{post.caption}</Text>
+            </Text>
+
           </View>
 
           <ScrollView>
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
+            {post.comments.length > 0 && post.comments.map((comment, index) => (
+              <Comment key={index} comment={comment} token={token} />
+            ))}
           </ScrollView>
         </View>
       </ScrollView>
@@ -187,7 +178,8 @@ const styles = StyleSheet.create({
   },
   caption: {
     marginLeft: 5,
-    color: "white",
+    color: "gray",
+    fontWeight: "normal",
   },
   addCommentContainer: {
     flexDirection: "row",
