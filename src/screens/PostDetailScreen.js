@@ -7,7 +7,7 @@ import { serverRequest } from "../utils/axios";
 import { useState } from "react";
 
 export default function PostDetailScreen({ navigation, route }) {
-  const { post, likeCount, user, token, userLoggedIn } = route.params
+  const { post, likeCount, user, token, userLoggedIn, isLiked, handleUnlike, handleLike } = route.params
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState(post.comments)
 
@@ -56,9 +56,15 @@ export default function PostDetailScreen({ navigation, route }) {
 
         <View style={styles.postFooter}>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.likeButton}>
-              <FontAwesome name="heart-o" size={24} color="white" />
-            </TouchableOpacity>
+            {isLiked ? (
+              <TouchableOpacity style={styles.likeButton} onPress={handleUnlike}>
+                <FontAwesome name="heart" size={24} color="red" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={styles.likeButton} onPress={handleLike}>
+                <FontAwesome name="heart-o" size={24} color="white" />
+              </TouchableOpacity>
+            )}
             <TouchableOpacity style={styles.commentButton}>
               <FontAwesome6 name="comment" size={24} color="white" />
             </TouchableOpacity>

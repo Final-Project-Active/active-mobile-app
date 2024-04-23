@@ -46,16 +46,6 @@ export default function CommunityScreen({ navigation, route }) {
     }
   }
 
-  // useEffect(() => {
-  //   getPosts();
-  // }, []);
-
-  // useEffect(() => {
-  //   if (route.params && route.params.refreshData) {
-  //     getPosts();
-  //   }
-  // }, [route.params]);
-
   useFocusEffect(
     React.useCallback(() => {
       getPosts();
