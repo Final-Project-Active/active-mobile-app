@@ -54,8 +54,8 @@ const CommunityStack = () => (
 
 const HomeStack = () => (
     <Stack.Navigator>
-        <Stack.Screen name="HomeScreen" component={HomeScreen} options={{headerShown: false }} />
-        <Stack.Screen name="UserWorkoutScreen" component={UserWorkoutScreen} options={{headerShown: false }} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="UserWorkoutScreen" component={UserWorkoutScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
 )
 
@@ -176,7 +176,8 @@ export default function navigation() {
                 console.log(error)
             }
         })()
-    }, [setIsLoggedIn])
+    }, [])
+
     return (
         <NavigationContainer>
             <Stack.Navigator>
@@ -184,10 +185,10 @@ export default function navigation() {
                     <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
                 ) : (
                     <>
-                    <Stack.Screen name="AuthStack" component={AuthStack} options={{ headerShown: false }} />
-                    <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false }} />
+                        <Stack.Screen name="AuthStack" component={AuthStack} options={{ headerShown: false }} />
+                        <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false }} />
                     </>
-                    
+
                 )}
             </Stack.Navigator>
         </NavigationContainer>
