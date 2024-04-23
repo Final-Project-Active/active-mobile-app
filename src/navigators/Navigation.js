@@ -16,6 +16,7 @@ import { useContext, useEffect } from 'react';
 import { getItemAsync } from 'expo-secure-store';
 import ProfileScreen from '../screens/ProfileScreen';
 import AuthContext from '../contexts/authContext';
+import WorkoutDetail from '../screens/WorkoutDetail';
 
 const Stack = createNativeStackNavigator();
 
@@ -106,6 +107,11 @@ export default function navigation() {
             <Stack.Screen
               name='ProfileScreen'
               component={ProfileScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name='WorkoutDetail'
+              component={WorkoutDetail}
               options={{ headerShown: false }}
             />
           </>
