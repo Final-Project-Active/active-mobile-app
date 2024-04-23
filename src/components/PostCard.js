@@ -4,6 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { calculateTimeAgo } from "../utils/helpers";
 import { useEffect, useState } from "react";
 import { serverRequest } from "../utils/axios";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function PostCard({ navigation, post, token, userLoggedIn }) {
   const [user, setUser] = useState({
@@ -94,7 +95,7 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
       </View>
       <TouchableOpacity
         onPress={() => navigation.navigate("PostDetailScreen", {
-          post, userLoggedIn, likeCount, user, token, isLiked, handleUnlike, handleLike
+          post, userLoggedIn, likeCount, user, token, isLiked, setIsLiked, setLikeCount
         })}
       >
         <Image
@@ -117,7 +118,7 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
           <TouchableOpacity
             style={styles.commentButton}
             onPress={() => navigation.navigate("PostDetailScreen", {
-              post, userLoggedIn, likeCount, user, token, isLiked, handleUnlike, handleLike
+              post, userLoggedIn, likeCount, user, token, isLiked, setIsLiked, setLikeCount
             })}
           >
             <FontAwesome6 name="comment" size={24} color="white" />
@@ -135,7 +136,7 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
           <TouchableOpacity
             style={styles.viewAllCommentsButton}
             onPress={() => navigation.navigate("PostDetailScreen", {
-              post, userLoggedIn, likeCount, user, token, isLiked, handleUnlike, handleLike
+              post, userLoggedIn, likeCount, user, token, isLiked, setIsLiked, setLikeCount
             })}
           >
             <Text style={styles.viewAllCommentsText}>View all {post.comments.length} comment{post.comments.length > 1 ? "s" : ""}</Text>
@@ -149,7 +150,7 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
           />
           <TouchableOpacity
             onPress={() => navigation.navigate("PostDetailScreen", {
-              post, userLoggedIn, likeCount, user, token, isLiked, handleUnlike, handleLike
+              post, userLoggedIn, likeCount, user, token, isLiked, setIsLiked, setLikeCount
             })}
           >
             <Text style={styles.addComment}>Add comment...</Text>
