@@ -89,7 +89,7 @@ export default function WorkoutDetail() {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.button, styles.startButton]}
-            onPress={() => {}}
+            onPress={() => { }}
           >
             <Text style={[styles.buttonText, styles.startButtonText]}>
               Start Workout
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     margin: 8,
     marginRight: 12,
     minWidth: 100,
-    borderRadius: '50%',
+    borderRadius: 50,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-evenly',

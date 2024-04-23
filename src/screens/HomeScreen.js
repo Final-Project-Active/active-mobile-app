@@ -74,36 +74,38 @@ export default function HomeScreen({ navigation }) {
     const image = { uri: `http://img.youtube.com/vi/${thumbnail}/hqdefault.jpg` };
     const isAdded = myWorkouts.some(workout => workout._id === workoutId)
     return (
-      <View style={styles.cardContainer}>
-        {isAdded ? (
-          <View style={styles.addedButtonContainer}>
-          <Text style={styles.addedButtonText}>Added</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('WorkoutDetail', { workoutId })}>
+        <View style={styles.cardContainer}>
+          {isAdded ? (
+            <View style={styles.addedButtonContainer}>
+              <Text style={styles.addedButtonText}>Added</Text>
+            </View>
+          ) : (
+            <TouchableOpacity style={styles.plusButtonContainer} onPress={() => addToMyWorkout(workoutId)}>
+              <Text style={styles.plusButtonText}>+</Text>
+            </TouchableOpacity>
+          )}
+          <ImageBackground
+            source={image}
+            style={styles.cardBackground}
+          >
+            <LinearGradient
+              colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.7)"]}
+              style={styles.linearGradient}
+            >
+              <Text style={styles.workoutName}>{name}</Text>
+              <View style={styles.badgeContainer}>
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{time}</Text>
+                </View>
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{category}</Text>
+                </View>
+              </View>
+            </LinearGradient>
+          </ImageBackground>
         </View>
-        ) : ( 
-        <TouchableOpacity style={styles.plusButtonContainer} onPress={() => addToMyWorkout(workoutId)}>
-        <Text style={styles.plusButtonText}>+</Text>
       </TouchableOpacity>
-        )}
-      <ImageBackground
-        source={image}
-        style={styles.cardBackground}
-      >
-        <LinearGradient
-          colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.7)"]}
-          style={styles.linearGradient}
-        >
-          <Text style={styles.workoutName}>{name}</Text>
-          <View style={styles.badgeContainer}>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{time}</Text>
-            </View>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{category}</Text>
-            </View>
-          </View>
-        </LinearGradient>
-      </ImageBackground>
-      </View>
     )
   }
   const getDataWorkouts = async () => {
@@ -139,21 +141,18 @@ export default function HomeScreen({ navigation }) {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-        <View style={styles.logoContainer}>
-                    <Image source={Image12} style={styles.logo} />
-                    <TouchableOpacity onPress={() => navigation.navigate("UserWorkoutScreen")}>
-            <Text style={styles.myWorkoutText}>My Workout</Text>
-          </TouchableOpacity>
-                </View>
+          <View style={styles.logoContainer}>
+            <Image source={Image12} style={styles.logo} />
+            <TouchableOpacity onPress={() => navigation.navigate("UserWorkoutScreen")}>
+              <Text style={styles.myWorkoutText}>My Workout</Text>
+            </TouchableOpacity>
+          </View>
           <Text style={styles.heading}>
 
             Hello{" "}
             <Text style={styles.userName}>
               {name},
             </Text>
-          </Text>
-          <Text style={styles.greeting}>
-            {getTimeOfDay()}
           </Text>
           <Text style={styles.greeting}>{getTimeOfDay()}</Text>
           <View style={styles.workoutPlanContainer}>
