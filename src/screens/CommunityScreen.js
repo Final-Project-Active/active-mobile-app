@@ -5,7 +5,7 @@ import { getItemAsync } from "expo-secure-store";
 import { serverRequest } from "../utils/axios";
 import { useEffect, useState } from "react";
 
-export default function CommunityScreen({ navigation }) {
+export default function CommunityScreen({ navigation, route }) {
   const [posts, setPosts] = useState([])
   const [token, setToken] = useState("")
   const [userLoggedIn, setUserLoggedIn] = useState({
@@ -46,8 +46,14 @@ export default function CommunityScreen({ navigation }) {
   }
 
   useEffect(() => {
-    getPosts()
-  }, [])
+    getPosts();
+  }, []);
+
+  useEffect(() => {
+    if (route.params && route.params.refreshData) {
+      getPosts();
+    }
+  }, [route.params]);
 
   return (
     <View style={styles.container}>
@@ -58,7 +64,8 @@ export default function CommunityScreen({ navigation }) {
         />
       </View>
       <View style={styles.separator}></View>
-      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate("AddPostScreen")}>
+      <TouchableOpacity style={styles.addButton}
+        onPress={() => navigation.navigate("AddPostScreen", { token })}>
         <Text style={styles.addButtonText}>Add Post</Text>
       </TouchableOpacity>
       <ScrollView>
