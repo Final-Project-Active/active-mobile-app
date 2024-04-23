@@ -57,6 +57,7 @@ const HomeStack = () => (
     <Stack.Navigator>
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="UserWorkoutScreen" component={UserWorkoutScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="WorkoutDetail" component={WorkoutDetail} options={{ headerShown: false }} />
     </Stack.Navigator>
 )
 
