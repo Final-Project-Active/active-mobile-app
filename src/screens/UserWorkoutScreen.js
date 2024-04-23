@@ -7,10 +7,57 @@ import { getItemAsync } from "expo-secure-store";
 import Image12 from "../assets/Image12.png";
 
 export default function UserWorkoutScreen({ navigation }) {
-  const [data, setData] = useState([])
+  const [userWorkouts, setUserWorkouts] = useState([])
   const [name, setName] = useState("")
+  const [userId, setUserId] = useState(null)
 
-  const renderCard = (thumbnail, name, time) => {
+  useEffect(() => {
+    const fetchUserWorkout = async () => {
+        try {
+            const { accessToken, userId } = JSON.parse(await getItemAsync('user'));
+            setUserId(userId)
+            
+            const user = await serverRequest({
+              method: "get",
+              url: "/user",
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            });
+            setName(user.data.name);
+      
+            const userWorkoutResponse = await serverRequest({
+              method: "get",
+              url: "/userworkout",
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            });
+
+            const userWorkoutDetails = await Promise.all(
+                userWorkoutResponse.data.map(async(workout) => {
+                    const userWorkoutDetailsResponse = await serverRequest({
+                        method: "get",
+                        url: `/workout/${workout.workoutId}`,
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        }
+                    })
+                    return {
+                        ...workout,
+                        details: userWorkoutDetailsResponse.data
+                    }
+                })
+            )
+            setUserWorkouts(userWorkoutDetails)
+          } catch (error) {
+            console.log(error)
+          }
+    }
+    fetchUserWorkout()
+  }, [])
+
+  const renderCard = (thumbnail, name, time, category) => {
     const image = { uri: `http://img.youtube.com/vi/${thumbnail}/hqdefault.jpg` };
     return (
       <View style={styles.cardContainer}>
@@ -23,41 +70,19 @@ export default function UserWorkoutScreen({ navigation }) {
             style={styles.linearGradient}
           >
             <Text style={styles.workoutName}>{name}</Text>
-            <Text style={styles.workoutTime}>| {time}</Text>
+            <View style={styles.badgeContainer}>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{time}</Text>
+            </View>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{category}</Text>
+            </View>
+          </View>
           </LinearGradient>
         </ImageBackground>
       </View>
     )
   }
-  const getDataWorkouts = async () => {
-    try {
-      const { accessToken } = JSON.parse(await getItemAsync('user'));
-      const user = await serverRequest({
-        method: "get",
-        url: "/user",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      setName(user.data.name);
-
-      const response = await serverRequest({
-        method: "get",
-        url: `/workout?category=${user.data.physicalActivity}`,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      setData(response.data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  useEffect(() => {
-    getDataWorkouts()
-  }, [])
 
   return (
     <SafeAreaProvider>
@@ -71,8 +96,8 @@ export default function UserWorkoutScreen({ navigation }) {
           </Text>
         </View>
         <FlatList
-          data={data}
-          renderItem={({ item }) => renderCard(item.thumbnail, item.name, item.time)}
+          data={userWorkouts}
+          renderItem={({ item }) => renderCard(item.details.thumbnail, item.details.name, item.details.time, item.details.category)}
           keyExtractor={(item) => item._id}
           contentContainerStyle={styles.flatListContainer}
         />
@@ -155,5 +180,23 @@ const styles = StyleSheet.create({
   flatListContainer: {
     flexGrow: 1,
     paddingBottom: 20
+  },
+  badgeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 5,
+    maxWidth: 150,
+    paddingLeft: 20
+  },
+  badge: {
+    backgroundColor: "#333333",
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+    marginRight: 5
+  },
+  badgeText: {
+    color: "#FFFFFF",
+    fontSize: 12
   }
 })
