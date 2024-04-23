@@ -5,10 +5,10 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { serverRequest } from "../utils/axios"
 
 export default function LevelSelectionScreen({ navigation, route }) {
-  const [selectedLevel, setSelectedLevel] = useState("Beginner")
+  const [selectedLevel, setSelectedLevel] = useState("beginner")
   const [scrollPosition, setScrollPosition] = useState(0)
 
-  const data = ["Beginner", "Intermediate", "Advance"]
+  const data = ["beginner", "intermediate", "advanced"]
 
   useEffect(() => {
     const visibleIndexes = Math.floor(scrollPosition / 60)
