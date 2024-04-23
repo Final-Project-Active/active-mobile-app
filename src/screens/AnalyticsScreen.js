@@ -1,16 +1,18 @@
 import { Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { MaterialIcons } from '@expo/vector-icons';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LineChart } from "react-native-chart-kit";
+import { serverRequest } from "../utils/axios";
+import { getItemAsync } from "expo-secure-store";
 
 export default function AnalyticsScreen({ navigation }) {
     const [selectedOption, setSelectedOption] = useState("W1")
     const [currentDate, setCurrentDate] = useState(new Date())
 
-    const weightData = [60, 61, 62, 63]
-    const durationData = [30, 40, 35, 45]
-    const intensityData = [5, 6, 7, 8]
+    const [weightData, setWeightData] = useState([])
+    const [durationData, setDurationData] = useState([])
+    const [intensityData, setIntensityData] = useState([])
 
     const handleOptionSelect = (option) => {
         setSelectedOption(option)
@@ -53,32 +55,32 @@ export default function AnalyticsScreen({ navigation }) {
         return (
             <View>
                 <Text style={styles.heading}>{item.heading}</Text>
-            <LineChart
-                data={{
-                    labels: ['W1', 'W2', 'W3', 'W4'],
-                    datasets: [
-                        {
-                            data: item.data,
-                            color: item.color,
-                            strokeWidth: 2
-                        }
-                    ]
-                }}
-                width={Dimensions.get("window").width - 20}
-                height={220}
-                yAxisLabel={item.yAxisLabel}
-                yAxisSuffix={item.yAxisSuffix}
-                yAxisInterval={1}
-                chartConfig={item.chartConfig}
-                bezier
-                style={{
-                    marginVertical: 8,
-                    borderRadius: 16,
-                    top: 20,
-                    paddingBottom: 10,
-                    paddingLeft: 10
-                }}
-            />
+                <LineChart
+                    data={{
+                        labels: ['W1', 'W2', 'W3', 'W4'],
+                        datasets: [
+                            {
+                                data: item.data,
+                                color: item.color,
+                                strokeWidth: 2
+                            }
+                        ]
+                    }}
+                    width={Dimensions.get("window").width - 20}
+                    height={220}
+                    yAxisLabel={item.yAxisLabel}
+                    yAxisSuffix={item.yAxisSuffix}
+                    yAxisInterval={1}
+                    chartConfig={item.chartConfig}
+                    bezier
+                    style={{
+                        marginVertical: 8,
+                        borderRadius: 16,
+                        top: 20,
+                        paddingBottom: 10,
+                        paddingLeft: 10
+                    }}
+                />
             </View>
         )
     }
@@ -169,30 +171,75 @@ export default function AnalyticsScreen({ navigation }) {
         }
     ]
 
+    const getAnalytics = async () => {
+        setWeightData([])
+        setDurationData([])
+        setIntensityData([])
+        try {
+            const { accessToken } = JSON.parse(await getItemAsync('user'));
+            const res = await serverRequest({
+                method: "get",
+                url: "/analytics",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                }
+            })
+
+            if (res.data.length >= 4) {
+                const weight = []
+                const duration = []
+                const instensity = []
+                for (let i = 0; i < 4; i++) {
+                    // setWeightData(prev => [...prev, res.data[i].currentWeight])
+                    // setDurationData(prev => [...prev, res.data[i].duration])
+                    // setIntensityData(prev => [...prev, res.data[i].intensity])
+
+                    weight.push(res.data[i].currentWeight)
+                    duration.push(res.data[i].duration)
+                    instensity.push(res.data[i].intensity)
+                }
+                setWeightData([...weight])
+                setDurationData([...duration])
+                setIntensityData([...instensity])
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getAnalytics()
+    }, [])
+
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
-                <View style={styles.header}>
-                    <TouchableOpacity style={{ marginTop: 20 }} onPress={handleLeftArrowPress}>
-                        <MaterialIcons name="keyboard-arrow-left" size={30} color="white" style={{ marginRight: 10 }} />
-                    </TouchableOpacity>
-                    <Text style={styles.heading}>{formattedDate}</Text>
-                    <TouchableOpacity style={{ marginTop: 20 }} onPress={handleRightArrowPress}>
-                        <MaterialIcons name="keyboard-arrow-right" size={30} color="white" style={{ marginLeft: 10 }} />
-                    </TouchableOpacity>
+                {(weightData.length > 0 && durationData.length > 0 && intensityData.length > 0) ? (<>
+                    <View style={styles.header}>
+                        <TouchableOpacity style={{ marginTop: 20 }} onPress={handleLeftArrowPress}>
+                            <MaterialIcons name="keyboard-arrow-left" size={30} color="white" style={{ marginRight: 10 }} />
+                        </TouchableOpacity>
+                        <Text style={styles.heading}>{formattedDate}</Text>
+                        <TouchableOpacity style={{ marginTop: 20 }} onPress={handleRightArrowPress}>
+                            <MaterialIcons name="keyboard-arrow-right" size={30} color="white" style={{ marginLeft: 10 }} />
+                        </TouchableOpacity>
 
-                </View>
-                <View style={styles.ellipseContainer}>
-                    {generateOvalContainers()}
-                </View>
-                <FlatList
-                    data={lineCharts}
-                    renderItem={renderLineChart}
-                    keyExtractor={(item, index) => index.toString()}
-                    vertical
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingBottom: 100 }}
-                />
+                    </View>
+                    <View style={styles.ellipseContainer}>
+                        {generateOvalContainers()}
+                    </View>
+
+                    <FlatList
+                        data={lineCharts}
+                        renderItem={renderLineChart}
+                        keyExtractor={(item, index) => index.toString()}
+                        vertical
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ paddingBottom: 100 }}
+                    />
+                </>) : (
+                    <Text style={styles.noDataText}>No data available</Text>
+                )}
             </SafeAreaView>
         </SafeAreaProvider>
     )
@@ -250,5 +297,13 @@ const styles = StyleSheet.create({
     },
     selectedOptionText: {
         color: "black"
+    },
+    noDataText: {
+        marginTop: 250,
+        color: "white",
+        fontSize: 20,
+        fontWeight: "bold",
+        textAlign: "center",
+        top: 20
     }
 })
