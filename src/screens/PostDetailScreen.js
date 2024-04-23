@@ -3,10 +3,34 @@ import imageLogo from "../assets/Image12.png";
 import { FontAwesome6 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import Comment from "../components/Comment";
+import { serverRequest } from "../utils/axios";
+import { useState } from "react";
 
 export default function PostDetailScreen({ navigation, route }) {
-  const { post, userLoggedIn, likeCount, user, token } = route.params
+  const { post, likeCount, user, token, userLoggedIn } = route.params
+  const [comment, setComment] = useState('')
+  const [comments, setComments] = useState(post.comments)
 
+  const handleAddComment = async () => {
+    try {
+      await serverRequest({
+        method: "put",
+        url: "/comment",
+        data: {
+          postId: post._id,
+          comment
+        },
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      setComment('')
+      setComments([...comments, { comment, userId: userLoggedIn.id }])
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -49,7 +73,7 @@ export default function PostDetailScreen({ navigation, route }) {
           </View>
 
           <ScrollView>
-            {post.comments.length > 0 && post.comments.map((comment, index) => (
+            {comments.length > 0 && comments.map((comment, index) => (
               <Comment key={index} comment={comment} token={token} />
             ))}
           </ScrollView>
@@ -60,9 +84,11 @@ export default function PostDetailScreen({ navigation, route }) {
         <TextInput
           style={styles.commentInput}
           placeholder="Add Comment"
+          value={comment}
+          onChangeText={setComment}
         />
 
-        <TouchableOpacity style={styles.submitButton}>
+        <TouchableOpacity style={styles.submitButton} onPress={() => handleAddComment()}>
           <Text style={styles.submitButtonText}>Comment</Text>
         </TouchableOpacity>
       </View>

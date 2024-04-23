@@ -8,7 +8,6 @@ export default function Comment({ comment, token }) {
     username: "",
     imageUrl: ""
   })
-
   const getUser = async () => {
     try {
       const user = await serverRequest({
@@ -35,10 +34,12 @@ export default function Comment({ comment, token }) {
 
   return (
     <View style={styles.commentContainer}>
-      <Image
-        source={{ uri: user.imageUrl }}
-        style={styles.profilePicture}
-      />
+      {user.imageUrl !== "" &&
+        <Image
+          source={{ uri: user.imageUrl }}
+          style={styles.profilePicture}
+        />
+      }
       <View style={styles.commentTextContainer}>
         <Text style={styles.username}>{user.name}</Text>
         <Text style={styles.addComment}>{comment.comment}</Text>

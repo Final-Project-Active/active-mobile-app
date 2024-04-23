@@ -121,7 +121,11 @@ export default function PostCard({ navigation, post, token, userLoggedIn }) {
             source={{ uri: userLoggedIn.imageUrl }}
             style={styles.profilePicture}
           />
-          <Text style={styles.addComment}>Add comment...</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("PostDetailScreen", { post, userLoggedIn, likeCount, user, token })}
+          >
+            <Text style={styles.addComment}>Add comment...</Text>
+          </TouchableOpacity>
         </View>
       </View>
       <Text style={styles.postTime}>{calculateTimeAgo(post.createdAt)}</Text>
