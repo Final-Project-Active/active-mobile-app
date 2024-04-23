@@ -1,4 +1,4 @@
-import { FlatList, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { FlatList, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { LinearGradient } from "expo-linear-gradient"
 import { useEffect, useState } from "react";
@@ -20,7 +20,7 @@ export default function ProgressFormScreen({ navigation }) {
           </Text>
           
         </View>
-        <View style={styles.form}>
+        <ScrollView style={styles.form}>
             <View style={styles.inputContainer}>
                 <Text style={styles.label}>What is your current weight (in kg)?</Text>
             <TextInput
@@ -67,7 +67,7 @@ export default function ProgressFormScreen({ navigation }) {
             />
           </TouchableOpacity>
         </View>
-          </View>
+          </ScrollView>
         
       </SafeAreaView>
     </SafeAreaProvider>
