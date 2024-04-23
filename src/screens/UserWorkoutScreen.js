@@ -13,74 +13,76 @@ export default function UserWorkoutScreen({ navigation }) {
 
   useEffect(() => {
     const fetchUserWorkout = async () => {
-        try {
-            const { accessToken, userId } = JSON.parse(await getItemAsync('user'));
-            setUserId(userId)
-            
-            const user = await serverRequest({
-              method: "get",
-              url: "/user",
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            });
-            setName(user.data.name);
-      
-            const userWorkoutResponse = await serverRequest({
-              method: "get",
-              url: "/userworkout",
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            });
+      try {
+        const { accessToken, userId } = JSON.parse(await getItemAsync('user'));
+        setUserId(userId)
 
-            const userWorkoutDetails = await Promise.all(
-                userWorkoutResponse.data.map(async(workout) => {
-                    const userWorkoutDetailsResponse = await serverRequest({
-                        method: "get",
-                        url: `/workout/${workout.workoutId}`,
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`
-                        }
-                    })
-                    return {
-                        ...workout,
-                        details: userWorkoutDetailsResponse.data
-                    }
-                })
-            )
-            setUserWorkouts(userWorkoutDetails)
-          } catch (error) {
-            console.log(error)
-          }
+        const user = await serverRequest({
+          method: "get",
+          url: "/user",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        setName(user.data.name);
+
+        const userWorkoutResponse = await serverRequest({
+          method: "get",
+          url: "/userworkout",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        const userWorkoutDetails = await Promise.all(
+          userWorkoutResponse.data.map(async (workout) => {
+            const userWorkoutDetailsResponse = await serverRequest({
+              method: "get",
+              url: `/workout/${workout.workoutId}`,
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              }
+            })
+            return {
+              ...workout,
+              details: userWorkoutDetailsResponse.data
+            }
+          })
+        )
+        setUserWorkouts(userWorkoutDetails)
+      } catch (error) {
+        console.log(error)
+      }
     }
     fetchUserWorkout()
   }, [])
 
-  const renderCard = (thumbnail, name, time, category) => {
+  const renderCard = (thumbnail, name, time, category, workoutId) => {
     const image = { uri: `http://img.youtube.com/vi/${thumbnail}/hqdefault.jpg` };
     return (
-      <View style={styles.cardContainer}>
-        <ImageBackground
-          source={image}
-          style={styles.cardBackground}
-        >
-          <LinearGradient
-            colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.7)"]}
-            style={styles.linearGradient}
+      <TouchableOpacity onPress={() => navigation.navigate('WorkoutDetail', { workoutId })}>
+        <View style={styles.cardContainer}>
+          <ImageBackground
+            source={image}
+            style={styles.cardBackground}
           >
-            <Text style={styles.workoutName}>{name}</Text>
-            <View style={styles.badgeContainer}>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{time}</Text>
-            </View>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{category}</Text>
-            </View>
-          </View>
-          </LinearGradient>
-        </ImageBackground>
-      </View>
+            <LinearGradient
+              colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.7)"]}
+              style={styles.linearGradient}
+            >
+              <Text style={styles.workoutName}>{name}</Text>
+              <View style={styles.badgeContainer}>
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{time}</Text>
+                </View>
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>{category}</Text>
+                </View>
+              </View>
+            </LinearGradient>
+          </ImageBackground>
+        </View>
+      </TouchableOpacity>
     )
   }
 
@@ -88,16 +90,22 @@ export default function UserWorkoutScreen({ navigation }) {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-        <View style={styles.logoContainer}>
-                    <Image source={Image12} style={styles.logo} />
-                </View>
+          <View style={styles.logoContainer}>
+            <Image source={Image12} style={styles.logo} />
+          </View>
           <Text style={styles.heading}>
             My Workout
           </Text>
         </View>
         <FlatList
           data={userWorkouts}
-          renderItem={({ item }) => renderCard(item.details.thumbnail, item.details.name, item.details.time, item.details.category)}
+          renderItem={({ item }) => renderCard(
+            item.details.thumbnail,
+            item.details.name,
+            item.details.time,
+            item.details.category,
+            item.details.workoutId
+          )}
           keyExtractor={(item) => item._id}
           contentContainerStyle={styles.flatListContainer}
         />
