@@ -57,7 +57,7 @@ export default function HomeScreen({ navigation }) {
     }
   }
 
-  const renderCard = (thumbnail, name, time, workoutId) => {
+  const renderCard = (thumbnail, name, time, category, workoutId) => {
     const image = { uri: `http://img.youtube.com/vi/${thumbnail}/hqdefault.jpg` };
     const isAdded = myWorkouts.some(workout => workout._id === workoutId)
     return (
@@ -80,7 +80,14 @@ export default function HomeScreen({ navigation }) {
           style={styles.linearGradient}
         >
           <Text style={styles.workoutName}>{name}</Text>
-          <Text style={styles.workoutTime}>| {time}</Text>
+          <View style={styles.badgeContainer}>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{time}</Text>
+            </View>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{category}</Text>
+            </View>
+          </View>
         </LinearGradient>
       </ImageBackground>
       </View>
@@ -144,7 +151,7 @@ export default function HomeScreen({ navigation }) {
         </View>
         <FlatList
           data={data}
-          renderItem={({ item }) => renderCard(item.thumbnail, item.name, item.time, item._id)}
+          renderItem={({ item }) => renderCard(item.thumbnail, item.name, item.time, item.category, item._id)}
           keyExtractor={(item) => item._id}
           contentContainerStyle={styles.flatListContainer}
         />
@@ -271,11 +278,35 @@ const styles = StyleSheet.create({
   workoutTime: {
     color: "#59A5D8",
     fontSize: 15,
-    marginTop: 5,
+    marginTop: 0,
+    marginLeft: 20
+  },
+  workoutCategory: {
+    color: "#59A5D8",
+    fontSize: 15,
+    marginTop: -5,
     marginLeft: 20
   },
   flatListContainer: {
     flexGrow: 1,
     paddingBottom: 20
+  },
+  badgeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 5,
+    maxWidth: 150,
+    paddingLeft: 20
+  },
+  badge: {
+    backgroundColor: "#333333",
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+    marginRight: 5
+  },
+  badgeText: {
+    color: "#FFFFFF",
+    fontSize: 12
   }
 })
