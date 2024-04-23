@@ -6,42 +6,14 @@ import { serverRequest } from "../utils/axios";
 import { getItemAsync } from "expo-secure-store";
 import Image12 from "../assets/Image12.png";
 
-export default function HomeScreen({ navigation }) {
+export default function UserWorkoutScreen({ navigation }) {
   const [data, setData] = useState([])
   const [name, setName] = useState("")
-
-  const getTimeOfDay = () => {
-    const currentTime = new Date().getHours()
-
-    if (currentTime >= 5 && currentTime < 12) {
-      return "Good morning."
-    } else if (currentTime >= 12 && currentTime < 18) {
-      return "Good afternoon."
-    } else {
-      return "Good evening."
-    }
-  }
-
-  const formattedDate = () => {
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
-    const currentDate = new Date()
-    const day = days[currentDate.getDay()]
-    const date = currentDate.getDate()
-    const month = months[currentDate.getMonth()]
-    const year = currentDate.getFullYear()
-
-    return `${day}, ${date} ${month} ${year}`
-  }
 
   const renderCard = (thumbnail, name, time) => {
     const image = { uri: `http://img.youtube.com/vi/${thumbnail}/hqdefault.jpg` };
     return (
       <View style={styles.cardContainer}>
-        <TouchableOpacity style={styles.plusButtonContainer}>
-          <Text style={styles.plusButtonText}>+</Text>
-        </TouchableOpacity>
         <ImageBackground
           source={image}
           style={styles.cardBackground}
@@ -93,25 +65,10 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.header}>
         <View style={styles.logoContainer}>
                     <Image source={Image12} style={styles.logo} />
-                    <TouchableOpacity onPress={() => navigation.navigate("UserWorkoutScreen")}>
-            <Text style={styles.myWorkoutText}>My Workout</Text>
-          </TouchableOpacity>
                 </View>
           <Text style={styles.heading}>
-            Hello{" "}
-            <Text style={styles.userName}>
-              {name},
-            </Text>
+            My Workout
           </Text>
-          <Text style={styles.greeting}>
-            {getTimeOfDay()}
-          </Text>
-          <View style={styles.workoutPlanContainer}>
-            <Text style={styles.workoutPlan}>Today's Workout Plan</Text>
-            <View style={styles.currentDateContainer}>
-              <Text style={styles.currentDate}>{formattedDate()}</Text>
-            </View>
-          </View>
         </View>
         <FlatList
           data={data}
@@ -143,23 +100,13 @@ const styles = StyleSheet.create({
   logo: {
     left: -20
   },
-  myWorkoutText: {
-    color: "#59A5D8",
-    fontWeight: "bold",
-    paddingBottom: 10,
-    textAlign: "right"
-  },
   heading: {
     color: "white",
     fontSize: 30,
+    textAlign: "center"
   },
   userName: {
     fontWeight: "bold",
-  },
-  greeting: {
-    color: "white",
-    fontWeight: "bold",
-    marginTop: 10
   },
   workoutPlanContainer: {
     marginTop: 50,
@@ -171,33 +118,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold"
   },
-  currentDateContainer: {
-    flex: 1,
-    alignItems: "flex-end"
-  },
-  currentDate: {
-    color: "#59A5D8"
-  },
   cardContainer: {
     marginTop: 20,
     marginBottom: 20
-  },
-  plusButtonContainer: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-    backgroundColor: "#59A5D8",
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1
-  },
-  plusButtonText: {
-    color: "white",
-    fontSize: 20,
-    fontWeight: "bold",
   },
   cardBackground: {
     width: "100%",
