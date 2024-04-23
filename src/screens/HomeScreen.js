@@ -13,29 +13,42 @@ export default function HomeScreen({ navigation }) {
   const [myWorkouts, setMyWorkouts] = useState([])
 
   const getTimeOfDay = () => {
-    const currentTime = new Date().getHours()
+    const currentTime = new Date().getHours();
 
     if (currentTime >= 5 && currentTime < 12) {
-      return "Good morning."
+      return 'Good morning.';
     } else if (currentTime >= 12 && currentTime < 18) {
-      return "Good afternoon."
+      return 'Good afternoon.';
     } else {
-      return "Good evening."
+      return 'Good evening.';
     }
-  }
+  };
 
   const formattedDate = () => {
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
 
-    const currentDate = new Date()
-    const day = days[currentDate.getDay()]
-    const date = currentDate.getDate()
-    const month = months[currentDate.getMonth()]
-    const year = currentDate.getFullYear()
+    const currentDate = new Date();
+    const day = days[currentDate.getDay()];
+    const date = currentDate.getDate();
+    const month = months[currentDate.getMonth()];
+    const year = currentDate.getFullYear();
 
-    return `${day}, ${date} ${month} ${year}`
-  }
+    return `${day}, ${date} ${month} ${year}`;
+  };
 
   const addToMyWorkout = async (workoutId) => {
     try {
@@ -118,7 +131,6 @@ export default function HomeScreen({ navigation }) {
       console.log(error)
     }
   }
-
   useEffect(() => {
     getDataWorkouts()
   }, [])
@@ -134,6 +146,7 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
                 </View>
           <Text style={styles.heading}>
+
             Hello{" "}
             <Text style={styles.userName}>
               {name},
@@ -142,6 +155,7 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.greeting}>
             {getTimeOfDay()}
           </Text>
+          <Text style={styles.greeting}>{getTimeOfDay()}</Text>
           <View style={styles.workoutPlanContainer}>
             <Text style={styles.workoutPlan}>Today's Workout Plan</Text>
             <View style={styles.currentDateContainer}>
@@ -157,13 +171,13 @@ export default function HomeScreen({ navigation }) {
         />
       </SafeAreaView>
     </SafeAreaProvider>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black",
+    backgroundColor: 'black',
     paddingHorizontal: 20,
     paddingTop: 20
   },
@@ -186,37 +200,37 @@ const styles = StyleSheet.create({
     textAlign: "right"
   },
   heading: {
-    color: "white",
+    color: 'white',
     fontSize: 30,
   },
   userName: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   greeting: {
-    color: "white",
-    fontWeight: "bold",
-    marginTop: 10
+    color: 'white',
+    fontWeight: 'bold',
+    marginTop: 10,
   },
   workoutPlanContainer: {
     marginTop: 50,
-    flexDirection: "row",
-    alignItems: "center"
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   workoutPlan: {
-    color: "white",
+    color: 'white',
     fontSize: 18,
-    fontWeight: "bold"
+    fontWeight: 'bold',
   },
   currentDateContainer: {
     flex: 1,
-    alignItems: "flex-end"
+    alignItems: 'flex-end',
   },
   currentDate: {
-    color: "#59A5D8"
+    color: '#59A5D8',
   },
   cardContainer: {
     marginTop: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   plusButtonContainer: {
     position: "absolute",
@@ -252,31 +266,31 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   cardBackground: {
-    width: "100%",
+    width: '100%',
     height: 200,
     borderRadius: 10,
-    overflow: "hidden",
-    justifyContent: "center",
-    alignItems: "center"
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   linearGradient: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     right: 0,
     top: 0,
     bottom: 0,
-    borderRadius: 10
+    borderRadius: 10,
   },
   workoutName: {
-    color: "white",
+    color: 'white',
     fontSize: 20,
-    fontWeight: "bold",
-    textAlign: "left",
+    fontWeight: 'bold',
+    textAlign: 'left',
     marginTop: 120,
-    marginLeft: 20
+    marginLeft: 20,
   },
   workoutTime: {
-    color: "#59A5D8",
+    color: '#59A5D8',
     fontSize: 15,
     marginTop: 0,
     marginLeft: 20
@@ -289,7 +303,7 @@ const styles = StyleSheet.create({
   },
   flatListContainer: {
     flexGrow: 1,
-    paddingBottom: 20
+    paddingBottom: 20,
   },
   badgeContainer: {
     flexDirection: "row",
