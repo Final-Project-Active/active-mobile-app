@@ -1,7 +1,33 @@
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import imageLogo from "../assets/Image12.png";
+import { useState } from "react";
+import { serverRequest } from "../utils/axios";
 
-export default function AddPostScreen({ navigation }) {
+export default function AddPostScreen({ navigation, route }) {
+  const [caption, setCaption] = useState('');
+  const [thumbnail, setThumbnail] = useState('');
+
+  const handleSubmit = async () => {
+    try {
+      await serverRequest({
+        method: 'post',
+        url: '/post',
+        data: {
+          caption,
+          thumbnail
+        },
+        headers: {
+          Authorization: `Bearer ${route.params.token}`,
+        },
+      })
+
+      setCaption('')
+      setThumbnail('')
+      navigation.navigate("CommunityScreen", { refreshData: true });
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -15,14 +41,18 @@ export default function AddPostScreen({ navigation }) {
         style={styles.captionInput}
         placeholder="Caption"
         multiline
+        value={caption}
+        onChangeText={setCaption}
       />
 
       <TextInput
         style={styles.fileInput}
         placeholder="Upload File"
+        value={thumbnail}
+        onChangeText={setThumbnail}
       />
 
-      <TouchableOpacity style={styles.submitButton}>
+      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
         <Text style={styles.submitButtonText}>Post</Text>
       </TouchableOpacity>
     </View>

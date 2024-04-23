@@ -3,14 +3,34 @@ import imageLogo from "../assets/Image12.png";
 import { FontAwesome6 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import Comment from "../components/Comment";
+import { serverRequest } from "../utils/axios";
+import { useState } from "react";
 
-export default function PostDetailScreen({ navigation }) {
-  const comments = [
-    { id: 1, username: "User1", comment: "Comment 1" },
-    { id: 2, username: "User2", comment: "Comment 2" },
-    { id: 3, username: "User3", comment: "Comment 3" },
-  ];
+export default function PostDetailScreen({ navigation, route }) {
+  const { post, likeCount, user, token, userLoggedIn } = route.params
+  const [comment, setComment] = useState('')
+  const [comments, setComments] = useState(post.comments)
 
+  const handleAddComment = async () => {
+    try {
+      await serverRequest({
+        method: "put",
+        url: "/comment",
+        data: {
+          postId: post._id,
+          comment
+        },
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      setComment('')
+      setComments([...comments, { comment, userId: userLoggedIn.id }])
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -23,14 +43,14 @@ export default function PostDetailScreen({ navigation }) {
       <ScrollView>
         <View style={styles.postHeader}>
           <Image
-            source={{ uri: "https://img.freepik.com/free-vector/cute-monkey-holding-banana-baseball-bat-stick-cartoon-vector-icon-illustration-animal-sport_138676-7050.jpg" }}
+            source={{ uri: user.imageUrl }}
             style={styles.profilePicture}
           />
-          <Text style={styles.username}>Username</Text>
+          <Text style={styles.username}>{user.name}</Text>
         </View>
 
         <Image
-          source={{ uri: "https://img.freepik.com/free-vector/cute-monkey-holding-banana-baseball-bat-stick-cartoon-vector-icon-illustration-animal-sport_138676-7050.jpg" }}
+          source={{ uri: post.thumbnail }}
           style={styles.postImage}
         />
 
@@ -43,24 +63,19 @@ export default function PostDetailScreen({ navigation }) {
               <FontAwesome6 name="comment" size={24} color="white" />
             </TouchableOpacity>
           </View>
-          <Text style={styles.likeCount}>10 likes</Text>
+          {likeCount > 0 && <Text style={styles.likeCount}>{likeCount} like{likeCount > 1 ? "s" : ""}</Text>}
 
           <View style={styles.captionContainer}>
-            <Text style={styles.username}>Username</Text>
-            <Text style={styles.caption}>This is the caption of the post.</Text>
+            <Text style={styles.username}>{user.username}{" "}
+              <Text style={styles.caption}>{post.caption}</Text>
+            </Text>
+
           </View>
 
           <ScrollView>
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
+            {comments.length > 0 && comments.map((comment, index) => (
+              <Comment key={index} comment={comment} token={token} />
+            ))}
           </ScrollView>
         </View>
       </ScrollView>
@@ -69,9 +84,11 @@ export default function PostDetailScreen({ navigation }) {
         <TextInput
           style={styles.commentInput}
           placeholder="Add Comment"
+          value={comment}
+          onChangeText={setComment}
         />
 
-        <TouchableOpacity style={styles.submitButton}>
+        <TouchableOpacity style={styles.submitButton} onPress={() => handleAddComment()}>
           <Text style={styles.submitButtonText}>Comment</Text>
         </TouchableOpacity>
       </View>
@@ -187,7 +204,8 @@ const styles = StyleSheet.create({
   },
   caption: {
     marginLeft: 5,
-    color: "white",
+    color: "gray",
+    fontWeight: "normal",
   },
   addCommentContainer: {
     flexDirection: "row",

@@ -1,15 +1,48 @@
 import { Image, StyleSheet, Text, View } from "react-native";
+import { serverRequest } from "../utils/axios";
+import { useEffect, useState } from "react";
 
-export default function Comment() {
+export default function Comment({ comment, token }) {
+  const [user, setUser] = useState({
+    name: "",
+    username: "",
+    imageUrl: ""
+  })
+  const getUser = async () => {
+    try {
+      const user = await serverRequest({
+        method: "get",
+        url: `/user/${comment.userId}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      setUser({
+        name: user.data.name,
+        username: user.data.username,
+        imageUrl: user.data.imageUrl
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getUser()
+  }, [])
+
   return (
     <View style={styles.commentContainer}>
-      <Image
-        source={{ uri: "https://img.freepik.com/free-vector/cute-monkey-holding-banana-baseball-bat-stick-cartoon-vector-icon-illustration-animal-sport_138676-7050.jpg" }}
-        style={styles.profilePicture}
-      />
+      {user.imageUrl !== "" &&
+        <Image
+          source={{ uri: user.imageUrl }}
+          style={styles.profilePicture}
+        />
+      }
       <View style={styles.commentTextContainer}>
-        <Text style={styles.username}>Username</Text>
-        <Text style={styles.addComment}>Add comment...</Text>
+        <Text style={styles.username}>{user.name}</Text>
+        <Text style={styles.addComment}>{comment.comment}</Text>
       </View>
     </View>
   )
