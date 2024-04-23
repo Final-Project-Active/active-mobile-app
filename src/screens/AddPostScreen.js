@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import imageLogo from "../assets/Image12.png";
 import { useState } from "react";
 import { serverRequest } from "../utils/axios";
@@ -37,6 +37,7 @@ export default function AddPostScreen({ navigation, route }) {
         />
       </View>
       <View style={styles.separator}></View>
+      <ScrollView>
       <TextInput
         style={styles.captionInput}
         placeholder="Caption"
@@ -44,17 +45,16 @@ export default function AddPostScreen({ navigation, route }) {
         value={caption}
         onChangeText={setCaption}
       />
-
       <TextInput
         style={styles.fileInput}
         placeholder="Upload File"
         value={thumbnail}
         onChangeText={setThumbnail}
       />
-
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
         <Text style={styles.submitButtonText}>Post</Text>
       </TouchableOpacity>
+      </ScrollView>
     </View>
   )
 }
