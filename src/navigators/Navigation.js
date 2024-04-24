@@ -18,7 +18,7 @@ import AnalyticsScreen from "../screens/AnalyticsScreen";
 import ProgressFormScreen from "../screens/ProgressFormScreen";
 import CommunityScreen from "../screens/CommunityScreen";
 import NotificationScreen from '../screens/NotificationScreen';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getItemAsync } from 'expo-secure-store';
 import ProfileScreen from '../screens/ProfileScreen';
 import AuthContext from '../contexts/authContext';
@@ -26,6 +26,7 @@ import { Entypo, Feather, Ionicons } from '@expo/vector-icons';
 import { Text } from 'react-native';
 import AddPostScreen from '../screens/AddPostScreen';
 import PostDetailScreen from '../screens/PostDetailScreen';
+import { serverRequest } from '../utils/axios';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -165,7 +166,64 @@ const MainTabs = () => (
 )
 
 export default function navigation() {
-    const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+    const { isLoggedIn, setIsLoggedIn, isProgressForm, setIsProgressForm } = useContext(AuthContext);
+
+    const getUser = async (token) => {
+        try {
+            const user = await serverRequest({
+                method: "get",
+                url: "/user",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (user)
+                return user.data.createdAt
+            return null
+        } catch (error) {
+            console.log("Get User")
+            console.log(error)
+        }
+    }
+    const isMoreThan7Days = (dateString) => {
+        const inputDate = new Date(dateString);
+        const today = new Date();
+        const diff = today - inputDate;
+        const diffDays = diff / (1000 * 60 * 60 * 24);
+        return diffDays > 7;
+    }
+
+    const showProgressForm = async (token) => {
+        try {
+            const res = await serverRequest({
+                method: "get",
+                url: "/analytics",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            })
+
+            if (res.data.length > 0) {
+                let newestUpdated = res.data[0].createdAt;
+                for (let i = 1; i < res.data.length; i++) {
+                    if (newestUpdated < res.data[i].createdAt) {
+                        newestUpdated = res.data[i].createdAt
+                    }
+                }
+                if (isMoreThan7Days(newestUpdated))
+                    setIsProgressForm(true)
+            } else {
+                const userJoinedDate = await getUser(token)
+                if (isMoreThan7Days(userJoinedDate)) {
+                    setIsProgressForm(true)
+                }
+            }
+
+        } catch (error) {
+            console.log("Show Progress Form")
+            console.log(error)
+        }
+    }
 
     useEffect(() => {
         (async () => {
@@ -173,6 +231,7 @@ export default function navigation() {
                 const user = JSON.parse(await getItemAsync('user'));
                 if (user) {
                     setIsLoggedIn(true);
+                    showProgressForm(user.accessToken);
                 }
             } catch (error) {
                 console.log(error)
@@ -184,7 +243,11 @@ export default function navigation() {
         <NavigationContainer>
             <Stack.Navigator>
                 {isLoggedIn ? (
-                    <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
+                    isProgressForm ? (
+                        <Stack.Screen name="ProgressForm" component={ProgressFormScreen} options={{ headerShown: false }} />
+                    ) : (
+                        <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
+                    )
                 ) : (
                     <>
                         <Stack.Screen name="AuthStack" component={AuthStack} options={{ headerShown: false }} />
@@ -193,6 +256,6 @@ export default function navigation() {
 
                 )}
             </Stack.Navigator>
-        </NavigationContainer>
+        </NavigationContainer >
     )
 }
