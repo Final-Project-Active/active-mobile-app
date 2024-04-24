@@ -104,7 +104,7 @@ export default function UserWorkoutScreen({ navigation }) {
             item.details.name,
             item.details.time,
             item.details.category,
-            item.details.workoutId
+            item.details._id
           )}
           keyExtractor={(item) => item._id}
           contentContainerStyle={styles.flatListContainer}
