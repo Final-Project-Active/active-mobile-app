@@ -14,6 +14,7 @@ import { serverRequest } from '../utils/axios';
 import { useContext, useState } from 'react';
 import AuthContext from '../contexts/authContext';
 import { setItemAsync } from 'expo-secure-store';
+import validator from 'validator';
 
 const { width } = Dimensions.get('window');
 export default function SignInScreen({ navigation }) {
@@ -21,8 +22,23 @@ export default function SignInScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const { setIsLoggedIn } = useContext(AuthContext);
+  const [errorMessages, setErrorMessages] = useState("");
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      setErrorMessages("Please fill in all fields");
+      return;
+    }
+
+    if (!validator.isEmail(email)) {
+      setErrorMessages("Invalid email");
+      return;
+    }
+
+    if (password.length < 6) {
+      setErrorMessages("Password must be at least 6 characters long");
+      return;
+    }
     try {
       const response = await serverRequest({
         method: 'post',
@@ -43,7 +59,7 @@ export default function SignInScreen({ navigation }) {
 
       navigation.navigate('MainTabs');
     } catch (error) {
-      console.log(error);
+      setErrorMessages("Invalid email or password");
     }
   };
 
@@ -113,6 +129,9 @@ export default function SignInScreen({ navigation }) {
               />
             </TouchableOpacity>
           </View>
+          <Text style={{ color: 'red', textAlign: 'center' }}>
+            {errorMessages}
+          </Text>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity

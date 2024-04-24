@@ -3,6 +3,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Image9 from "../assets/Image9.png";
 import { Ionicons } from "@expo/vector-icons"
 import { useState } from "react";
+import validator from "validator";
 
 const { width } = Dimensions.get("window");
 export default function SignUpScreen({ navigation }) {
@@ -14,18 +15,54 @@ export default function SignUpScreen({ navigation }) {
   });
 
   const [showPassword, setShowPassword] = useState(false)
-
+  const [errorMessages, setErrorMessages] = useState("");
   const handleChange = (name, value) => {
     setUser({ ...user, [name]: value });
   }
 
   const handleNext = () => {
-    setUser({
+    /*setUser({
       name: "",
       username: "",
       email: "",
       password: "",
-    });
+    });*/
+
+    if (!user.name || !user.username || !user.email || !user.password) {
+      setErrorMessages("Please fill in all fields");
+      return;
+    }
+
+    if (!validator.isEmail(user.email)) {
+      setErrorMessages("Invalid email");
+      return;
+    }
+
+    if (user.username.length < 6) {
+      setErrorMessages("Username must be at least 6 characters long");
+      return;
+    }
+
+    if (user.username.length > 20) {
+      setErrorMessages("Username must be at most 20 characters long");
+      return;
+    }
+
+    if (user.name.length < 3) {
+      setErrorMessages("Name must be at least 3 characters long");
+      return;
+    }
+
+    if (user.name.length > 20) {
+      setErrorMessages("Name must be at most 20 characters long");
+      return;
+    }
+
+    if (user.password.length < 6) {
+      setErrorMessages("Password must be at least 6 characters long");
+      return;
+    }
+
     navigation.navigate("GenderSelectionScreen", user);
   }
 
@@ -93,6 +130,7 @@ export default function SignUpScreen({ navigation }) {
               <Ionicons name={showPassword ? "eye-off-outline" : "eye-outline"} size={24} color="white" />
             </TouchableOpacity>
           </View>
+          <Text style={{ color: "red", textAlign: "center", marginTop: 10 }}>{errorMessages}</Text>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={[styles.button, styles.nextButton]}
