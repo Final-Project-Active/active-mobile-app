@@ -1,21 +1,22 @@
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { serverRequest } from "../utils/axios";
 import { getItemAsync } from "expo-secure-store";
 import { MaterialIcons } from "@expo/vector-icons";
+import AuthContext from "../contexts/authContext";
 
 export default function ProgressFormScreen({ navigation }) {
   const [currentWeight, setCurrentWeight] = useState("")
   const [duration, setDuration] = useState("")
   const [intensity, setIntensity] = useState("")
-
+  const { setIsProgressForm } = useContext(AuthContext);
   const handleSubmit = async () => {
     try {
       const user = await getItemAsync('user')
       const { accessToken } = JSON.parse(user)
 
-      const response = await serverRequest({
+      await serverRequest({
         method: 'post',
         url: "/analytics",
         data: {
@@ -27,10 +28,11 @@ export default function ProgressFormScreen({ navigation }) {
           Authorization: `Bearer ${accessToken}`
         }
       })
-      console.log(response.data, "<<< response")
       setCurrentWeight('')
       setDuration('')
       setIntensity('')
+      setIsProgressForm(false)
+      navigation.navigate('MainTabs')
     } catch (error) {
       console.error("Error submitting analytics:", error)
     }
