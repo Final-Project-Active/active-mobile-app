@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -161,6 +162,7 @@ export default function WorkoutDetail() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
+        <ScrollView>
         <View>{banner()}</View>
         <View>
           <Text style={styles.title}>{workoutDetails?.name}</Text>
@@ -197,6 +199,7 @@ export default function WorkoutDetail() {
         </View>) : (
           <Text style={styles.addToUserWorkoutText}>Please add the workout to your workout list to view the video.</Text>
         )}
+        </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
   );
