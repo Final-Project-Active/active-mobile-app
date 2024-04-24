@@ -3,6 +3,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -19,6 +20,7 @@ export default function WorkoutDetail() {
   const {workoutId} = route.params
   const [workoutDetails, setWorkoutDetails] = useState(null)
   const [playing, setPlaying] = useState(false);
+  const [myWorkouts, setMyWorkouts] = useState([]);
 
   const onStateChange = useCallback((state) => {
     if (state === "ended") {
@@ -44,6 +46,26 @@ export default function WorkoutDetail() {
       }
     }
     getWorkoutDetails()
+
+    const getUserWorkout = async () => {
+      try {
+        const {accessToken} = JSON.parse(await getItemAsync('user'))
+
+        const response = await serverRequest({
+          method: "get",
+          url: "/userworkout",
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
+
+        const workoutId = response.data.map(item => item.workoutId)
+        setMyWorkouts(workoutId)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    getUserWorkout()
   }, [workoutId])
 
   const markAsCompleted = async () => {
@@ -74,7 +96,18 @@ export default function WorkoutDetail() {
   const banner = () => {
     return (
       <View style={styles.cardContainer}>
-        <View>
+        {!myWorkouts.includes(workoutId) ? (
+          <ImageBackground
+          source={{ uri: `http://img.youtube.com/vi/${workoutDetails?.thumbnail}/hqdefault.jpg` }}
+          style={styles.cardBackground}
+          >
+            <LinearGradient
+            colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.7)']}
+            style={styles.linearGradient}
+          />
+          </ImageBackground>
+        ) : (
+          <View>
           {workoutDetails && <YoutubePlayer
         height={200}
         play={playing}
@@ -82,10 +115,7 @@ export default function WorkoutDetail() {
         onChangeState={onStateChange}
       />}
     </View>
-          <LinearGradient
-            colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.7)']}
-            style={styles.linearGradient}
-          />
+        )}
        
       </View>
     );
@@ -154,6 +184,7 @@ export default function WorkoutDetail() {
           renderItem={() => cardVideo()}
           keyExtractor={(item) => item.toString()}
         /> */}
+        {myWorkouts.includes(workoutId) ? (
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={[styles.button, styles.startButton]}
@@ -163,7 +194,9 @@ export default function WorkoutDetail() {
               Mark as completed
             </Text>
           </TouchableOpacity>
-        </View>
+        </View>) : (
+          <Text style={styles.addToUserWorkoutText}>Please add the workout to your workout list to view the video.</Text>
+        )}
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -254,6 +287,12 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     borderRadius: 10,
+  },
+  addToUserWorkoutText: {
+    color: "red",
+    padding: 20,
+    paddingVertical: 20,
+    textAlign: "center"
   },
   bottomTabContainer: {
     flexDirection: 'row',
