@@ -269,6 +269,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   addedButtonContainer: {
+    backgroundColor: "black",
     position: "absolute",
     top: 10,
     right: 10,
@@ -277,11 +278,12 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 1
+    zIndex: 1,
+    borderRadius: 50
   },
   addedButtonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "bold",
   },
   cardBackground: {
