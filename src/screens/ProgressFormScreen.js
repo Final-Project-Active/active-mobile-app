@@ -10,8 +10,29 @@ export default function ProgressFormScreen({ navigation }) {
   const [currentWeight, setCurrentWeight] = useState("")
   const [duration, setDuration] = useState("")
   const [intensity, setIntensity] = useState("")
+  const [errorMessages, setErrorMessages] = useState("")
   const { setIsProgressForm } = useContext(AuthContext);
   const handleSubmit = async () => {
+    if (!currentWeight || !duration || !intensity) {
+      setErrorMessages("Please fill in all fields");
+      return;
+    }
+
+    if (parseFloat(currentWeight) <= 0) {
+      setErrorMessages("Weight must be greater than 0");
+      return;
+    }
+
+    if (parseFloat(duration) <= 0) {
+      setErrorMessages("Duration must be greater than 0");
+      return;
+    }
+
+    if (parseFloat(intensity) <= 0 || parseFloat(intensity) > 10) {
+      setErrorMessages("Intensity must be between 1 and 10");
+      return;
+    }
+
     try {
       const user = await getItemAsync('user')
       const { accessToken } = JSON.parse(user)
@@ -35,6 +56,7 @@ export default function ProgressFormScreen({ navigation }) {
       navigation.navigate('MainTabs')
     } catch (error) {
       console.error("Error submitting analytics:", error)
+      setErrorMessages("Error submitting analytics")
     }
   }
 
@@ -83,6 +105,7 @@ export default function ProgressFormScreen({ navigation }) {
               onChangeText={setIntensity}
             />
           </View>
+          <Text style={{ color: "red", marginBottom: 10 }}>{errorMessages}</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
