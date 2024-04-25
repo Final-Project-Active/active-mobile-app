@@ -22,6 +22,7 @@ export default function WorkoutDetail() {
   const [workoutDetails, setWorkoutDetails] = useState(null)
   const [playing, setPlaying] = useState(false);
   const [myWorkouts, setMyWorkouts] = useState([]);
+  const [complete, setComplete] = useState(false)
 
   const onStateChange = useCallback((state) => {
     if (state === "ended") {
@@ -83,12 +84,14 @@ export default function WorkoutDetail() {
           completed: true
         }
       })
+      console.log(response.data, "<<<<<< response")
 
       setWorkoutDetails(prevDetails => ({
         ...prevDetails,
         completed: true
       }))
       console.log("Workout marked as completed successfuly!")
+      setComplete(response.data.completed)
     } catch (error) {
       console.error("Error marking workout as completed:", error)
     }
@@ -188,14 +191,16 @@ export default function WorkoutDetail() {
         /> */}
         {myWorkouts.includes(workoutId) ? (
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
+          {!complete ? ( <TouchableOpacity
             style={[styles.button, styles.startButton]}
             onPress={markAsCompleted}
           >
             <Text style={[styles.buttonText, styles.startButtonText]}>
               Mark as completed
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity>): (
+            <Text style={styles.addToUserWorkoutText}>The workout is already marked as completed.</Text>
+          )}
         </View>) : (
           <Text style={styles.addToUserWorkoutText}>Please add the workout to your workout list to view the video.</Text>
         )}
